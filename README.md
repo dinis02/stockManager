@@ -1,0 +1,2 @@
+# stockManager
+mangar stock 
