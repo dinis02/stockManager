@@ -1,0 +1,33 @@
+<div class="list-content">
+  <table class="full-width-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Produto</th>
+        <th>Marca</th>
+        <th>Categoria</th>
+        <th>Qt.</th>
+        <th>Un.</th>
+        <th>Fornecedor</th>
+        <th>Preço un. (€)</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of items">
+        <td>{{ i.date }}</td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.brand }}</td>
+        <td>{{ i.category }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.unit }}</td>
+        <td>{{ i.supplier }}</td>
+        <td>{{ i.price }}</td>
+        <td><button (click)="remove(i.id)">Apagar</button></td>
+      </tr>
+      <tr *ngIf="!items || items.length === 0">
+        <td colspan="9">Sem itens</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,30 @@
+{
+  "name": "stockManager",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ng serve --host 0.0.0.0 --port 4200",
+    "backend": "node server/index.js",
+    "dev": "npm run backend & npm run start"
+  },
+  "dependencies": {
+    "@angular/common": "^21.1.2",
+    "@angular/core": "^21.1.2",
+    "@angular/forms": "^21.1.2",
+    "@angular/platform-browser": "^21.1.2",
+    "@angular/platform-browser-dynamic": "^21.1.2",
+    "@angular/router": "^21.1.2",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "rxjs": "^7.8.2",
+    "zone.js": "^0.16.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^21.1.2",
+    "@angular-devkit/build-optimizer": "^0.1202.18",
+    "@angular/cli": "^21.1.2",
+    "@angular/compiler-cli": "^21.1.2"
+  }
+}

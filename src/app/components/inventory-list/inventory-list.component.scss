@@ -1,0 +1,48 @@
+.list-content { margin-top: 1.5rem; }
+.full-width-table th, .full-width-table td { padding: 0.6rem 0.8rem; }
+.full-width-table tbody tr td { vertical-align: middle; }
+
+/* Table card: inner white rounded panel */
+.table-card {
+	/* match form-card: use panel variable so background shows through consistently */
+	background: var(--panel-bg) !important;
+	border-radius: 14px;
+	padding: 26px 30px; /* match form */
+	border: 1px solid var(--input-border);
+	box-shadow: 0 10px 24px rgba(24,18,12,0.06); /* match form shadow */
+	margin: 1.25rem 0; /* outer gutter so card doesn't touch page edges */
+}
+.table-card .list-content { margin-top: 0; }
+
+.full-width-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+.full-width-table tbody tr { background: rgba(255,255,255,0.02); border-radius: 8px; transition: background 0.15s, transform 0.12s; }
+.full-width-table tbody tr:hover { background: rgba(255,255,255,0.05); transform: translateY(-2px); }
+.full-width-table tbody tr td { padding: 12px; }
+.full-width-table thead tr th { padding: 0.8rem 1rem; opacity: 0.95; color: #3a2e1a; font-weight:700; }
+
+/* Ensure table header doesn't apply a different background */
+.table-card .full-width-table thead {
+	background: transparent !important;
+}
+
+/* Delete button style */
+.full-width-table tbody tr td .delete-btn {
+	display: inline-block;
+	background: transparent;
+	border: 1px solid rgba(0,0,0,0.08);
+	color: var(--accent-strong);
+	padding: 6px 10px;
+	border-radius: 8px;
+	font-weight:600;
+	background: rgba(255,255,255,0.12);
+}
+.full-width-table tbody tr td .delete-btn:hover{ background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+/* Ensure inputs used in list (filters/search) match global modern style */
+.table-card input,
+.table-card select,
+.table-card textarea {
+	/* use global minimal styles */
+}
+
+.full-width-table tbody tr { border-radius: 12px; }
