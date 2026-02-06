@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ItemsService } from '../../services/items.service';
+import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -71,7 +72,7 @@ export class MyInvFormComponent {
 
   saving = false;
 
-  constructor(private http: HttpClient, private itemsService: ItemsService) {}
+  constructor(private http: HttpClient, private itemsService: ItemsService, private notificationService: NotificationService) {}
 
   save() {
     if (!this.item.name || !this.item.quantity) return;
@@ -79,8 +80,9 @@ export class MyInvFormComponent {
     this.http.post('/api/items', this.item).subscribe({
       next: () => {
         this.saving = false;
+        this.notificationService.show('Guardado com sucesso', 'success');
         this.reset();
-        this.itemsService.triggerRefresh();
+        this.itemsService.triggerRefresh('inventory-form');
       },
       error: () => (this.saving = false)
     });
@@ -99,4 +101,6 @@ export class MyInvFormComponent {
       notes: ''
     };
   }
+
+  
 }

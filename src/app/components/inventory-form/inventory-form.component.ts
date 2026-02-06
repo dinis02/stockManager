@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ItemsService } from '../../services/items.service';
+import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -25,7 +26,6 @@ export class InventoryFormComponent {
   };
 
   saving = false;
-  // no UI messages — items should just appear in the list
 
   @Input()
   set editItem(value: any) {
@@ -35,7 +35,7 @@ export class InventoryFormComponent {
     }
   }
 
-  constructor(private http: HttpClient, private itemsService: ItemsService) {}
+  constructor(private http: HttpClient, private itemsService: ItemsService, private notificationService: NotificationService) {}
 
   save() {
     // basic client-side validation
@@ -66,24 +66,27 @@ export class InventoryFormComponent {
           console.error('Failed updating local item', e);
         }
         this.saving = false;
+        this.notificationService.show('Guardado com sucesso', 'success');
         this.reset();
-        this.itemsService.triggerRefresh();
+        this.itemsService.triggerRefresh('inventory-form');
         return;
       } else {
         // attempt PUT to backend for existing server item
         const id = Number(this.item.id);
         this.http.put(`/api/items/${id}`, this.item).subscribe({ next: () => {
           this.saving = false;
+            this.notificationService.show('Guardado com sucesso', 'success');
           this.reset();
-          this.itemsService.triggerRefresh();
+          this.itemsService.triggerRefresh('inventory-form');
         }, error: (err) => {
           // log the error for debugging and fallback to local save
           console.error('PUT /api/items/' + id + ' failed', err);
           // do NOT automatically POST (that would create a duplicate). Save locally as a safe fallback.
           this.saveToLocal();
           this.saving = false;
+          this.notificationService.show('Guardado com sucesso', 'success');
           this.reset();
-          this.itemsService.triggerRefresh();
+          this.itemsService.triggerRefresh('inventory-form');
         }});
         return;
       }
@@ -93,15 +96,17 @@ export class InventoryFormComponent {
     this.http.post('/api/items', this.item).subscribe({
       next: () => {
         this.saving = false;
+        this.notificationService.show('Guardado com sucesso', 'success');
         this.reset();
-        this.itemsService.triggerRefresh();
+        this.itemsService.triggerRefresh('inventory-form');
       },
       error: () => {
         // fallback: save locally
         this.saveToLocal();
         this.saving = false;
+        this.notificationService.show('Guardado com sucesso', 'success');
         this.reset();
-        this.itemsService.triggerRefresh();
+        this.itemsService.triggerRefresh('inventory-form');
       }
     });
   }
@@ -117,6 +122,8 @@ export class InventoryFormComponent {
       console.error('Failed saving item locally', e);
     }
   }
+
+  
 
   reset() {
     this.item = {

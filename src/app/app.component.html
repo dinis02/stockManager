@@ -35,3 +35,8 @@
 		</section>
 	</div>
 </main>
+
+<!-- Global toast host so notifications show even if a form unmounts -->
+<div class="app-toast-host" *ngIf="notifications$ | async as notes">
+	<div class="app-toast" *ngFor="let n of notes" [attr.data-type]="n.type">{{ n.message }}</div>
+</div>

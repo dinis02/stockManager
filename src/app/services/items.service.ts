@@ -5,11 +5,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ItemsService {
   // use a BehaviorSubject so new subscribers immediately receive latest value
-  // allow refresh payload to be a number (timestamp) or a string source marker
-  private _refresh$ = new BehaviorSubject<string | number | null>(null);
+  // refresh payload is an object with { source?: string, ts: number }
+  private _refresh$ = new BehaviorSubject<{ source?: string | null; ts: number } | null>(null);
   private _edit$ = new BehaviorSubject<any | null>(null);
 
-  get refresh$(): Observable<string | number | null> {
+  get refresh$(): Observable<{ source?: string | null; ts: number } | null> {
     return this._refresh$.asObservable();
   }
 
@@ -22,7 +22,7 @@ export class ItemsService {
    * to ignore events originating from a specific component.
    */
   triggerRefresh(source?: string) {
-    this._refresh$.next(source || Date.now());
+    this._refresh$.next({ source: source || null, ts: Date.now() });
   }
 
   triggerEdit(item: any) {

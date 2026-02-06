@@ -344,6 +344,11 @@ input[type="date"]::-webkit-clear-button {
 .btn--icon-circle svg { width: 18px; height: 18px; }
 .btn--icon-circle:hover { background: rgba(255,255,255,0.08) !important; }
 
+/* Increase spacing between icon action buttons in table rows */
+.full-width-table tbody tr td .btn--icon-circle {
+  margin-left: 12px !important;
+}
+
 /* Ensure danger variant on icon circle is still minimal (no heavy red bg) */
 .btn--danger.btn--icon-circle {
   background: rgba(255,255,255,0.04) !important;
@@ -398,6 +403,36 @@ body.black-theme {
 body.black-theme .glass-card {
   background: #333 !important;
 }
+
+/* Global toast host for notifications */
+.app-toast-host {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none; /* allow clicks through except on the toast itself */
+}
+.app-toast {
+  pointer-events: auto;
+  padding: 14px 20px;
+  border-radius: 14px;
+  color: #ffffff;
+  font-weight: 700;
+  min-width: 360px;
+  max-width: 90vw;
+  background: var(--menu-solid) !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-align: center;
+}
+.app-toast[data-type="success"] { border-left: none !important; }
+.app-toast[data-type="error"] { border-left: none !important; }
+.app-toast[data-type="info"] { border-left: none !important; }
 body.black-theme .logo-dark {
   display: block !important;
   filter: none !important;

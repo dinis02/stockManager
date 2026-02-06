@@ -91,3 +91,19 @@
 
 /* Make sure form area has breathing room inside the outer glass card */
 .form-card { margin-bottom: 18px; }
+
+/* Small toast for success messages */
+.inventory-form__toast {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 1200;
+}
+.toast {
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.toast--success { background: linear-gradient(180deg,#2ecc71,#1e9b4a); }

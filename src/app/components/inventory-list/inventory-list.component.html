@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let i of items">
+      <tr *ngFor="let i of items; trackBy: trackById">
         <ng-container *ngIf="editingId !== i.id; else editRow">
           <td>{{ i.date }}</td>
           <td>{{ i.name }}</td>

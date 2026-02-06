@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InventoryFormComponent } from './components/inventory-form/inventory-form.component';
 import { InventoryListComponent } from './components/inventory-list/inventory-list.component';
 import { ItemsService } from './services/items.service';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -24,12 +25,17 @@ export class AppComponent {
     // when switching to the table view, trigger a reload via ItemsService so the list refreshes reliably
     if (view === 'table') {
       // trigger immediately and again after a short delay to avoid race conditions
-      this.itemsService.triggerRefresh();
-      setTimeout(() => this.itemsService.triggerRefresh(), 180);
+      this.itemsService.triggerRefresh('app');
+      setTimeout(() => this.itemsService.triggerRefresh('app'), 180);
     }
   }
   currentEdit: any = null;
-  constructor(private itemsService: ItemsService) {
+
+  // expose notifications observable for template toast host
+  get notifications$() {
+    return this.notificationService.notifications$;
+  }
+  constructor(private itemsService: ItemsService, private notificationService: NotificationService) {
     // subscribe to edits from ItemsService
     this.itemsService.edit$.subscribe(item => {
       this.currentEdit = item || null;
