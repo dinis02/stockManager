@@ -10,20 +10,22 @@
         <th>Un.</th>
         <th>Fornecedor</th>
         <th>Preço un. (€)</th>
+        <th>Observações</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let i of items; trackBy: trackById">
         <ng-container *ngIf="editingId !== i.id; else editRow">
-          <td>{{ i.date }}</td>
-          <td>{{ i.name }}</td>
-          <td>{{ i.brand }}</td>
-          <td>{{ i.category }}</td>
-          <td>{{ i.quantity }}</td>
-          <td>{{ i.unit }}</td>
-          <td>{{ i.supplier }}</td>
-          <td>{{ i.price }}</td>
+          <td [attr.data-tooltip]="i.date"><span class="cell-text">{{ i.date }}</span></td>
+          <td [attr.data-tooltip]="i.name"><span class="cell-text">{{ i.name }}</span></td>
+          <td [attr.data-tooltip]="i.brand"><span class="cell-text">{{ i.brand }}</span></td>
+          <td [attr.data-tooltip]="i.category"><span class="cell-text">{{ i.category }}</span></td>
+          <td [attr.data-tooltip]="i.quantity"><span class="cell-text">{{ i.quantity }}</span></td>
+          <td [attr.data-tooltip]="i.unit"><span class="cell-text">{{ i.unit }}</span></td>
+          <td [attr.data-tooltip]="i.supplier"><span class="cell-text">{{ i.supplier }}</span></td>
+          <td [attr.data-tooltip]="i.price"><span class="cell-text">{{ i.price }}</span></td>
+          <td class="notes-cell" [attr.data-tooltip]="i.notes"><span class="cell-text">{{ i.notes }}</span></td>
           <td>
             <button class="btn btn--icon-circle btn--sm" (click)="edit(i)" aria-label="Editar" title="Editar">
               <!-- Minimal pencil icon -->
@@ -45,19 +47,19 @@
           <td><input [(ngModel)]="editModel.unit" /></td>
           <td><input [(ngModel)]="editModel.supplier" /></td>
           <td><input [(ngModel)]="editModel.price" type="number" step="0.01" /></td>
+          <td><input [(ngModel)]="editModel.notes" /></td>
           <td>
-            <button class="btn btn--primary btn--sm btn--pill" (click)="saveEdit()" aria-label="Guardar">
+            <button class="btn btn--icon-circle btn--sm btn--primary" (click)="saveEdit()" aria-label="Guardar" title="Guardar">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-              <span>Guardar</span>
             </button>
-            <button class="btn btn--ghost btn--sm" (click)="cancelEdit()" aria-label="Cancelar">
+            <button class="btn btn--icon-circle btn--sm btn--ghost" (click)="cancelEdit()" aria-label="Cancelar" title="Cancelar">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.3 10.59 10.59 16.88 4.3z"/></svg>
             </button>
           </td>
         </ng-template>
       </tr>
       <tr *ngIf="!items || items.length === 0">
-        <td colspan="9">Sem itens</td>
+        <td colspan="10">Sem itens</td>
       </tr>
     </tbody>
   </table>

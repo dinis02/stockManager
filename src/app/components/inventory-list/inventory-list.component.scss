@@ -14,10 +14,87 @@
 }
 .table-card .list-content { margin-top: 0; }
 
-.full-width-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+/* make the table card stick to the top of the viewport when scrolling */
+.table-card {
+	position: sticky;
+	top: 92px;
+	z-index: 30;
+	max-height: calc(100vh - 112px);
+	overflow: auto;
+}
+
+.full-width-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; table-layout: fixed; }
 .full-width-table tbody tr { background: rgba(255,255,255,0.02); border-radius: 8px; transition: background 0.15s, transform 0.12s; }
 .full-width-table tbody tr:hover { background: rgba(255,255,255,0.05); transform: translateY(-2px); }
 .full-width-table tbody tr td { padding: 12px; }
+
+/* Force single-line cells, equal column widths and ellipsis with tooltip */
+.full-width-table th,
+.full-width-table td {
+	width: calc(100% / 10);
+	white-space: nowrap;
+	/* do not set overflow here — we want the td::after tooltip to be visible */
+}
+
+.full-width-table td .cell-text {
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: help; /* hint that hover shows more */
+}
+
+/* custom tooltip that replaces native title: uses panel background and white larger text */
+.full-width-table td { position: relative; }
+/* tooltip rendered by the td so it won't be clipped by the span */
+.full-width-table td[data-tooltip]:not([data-tooltip=""])::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%) translateY(12px);
+	white-space: normal; /* allow wrapping in tooltip */
+	max-width: 360px;
+	background: var(--panel-bg);
+	color: #ffffff;
+	font-size: 1.04rem; /* larger text */
+	padding: 8px 10px;
+	border-radius: 8px;
+	box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	z-index: 1200;
+	transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+	text-align: left;
+	right: auto;
+}
+
+.full-width-table td[data-tooltip]:not([data-tooltip=""]):hover::after {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(20px);
+}
+.full-width-table td:hover::after {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(14px);
+}
+
+/* Inputs used in row-edit should visually match the panel and have slightly larger text */
+.full-width-table td input,
+.full-width-table td select,
+.full-width-table td textarea {
+	background: var(--panel-bg) !important;
+	border: 1px solid var(--input-border);
+	color: var(--text);
+	font-size: 1.02rem;
+	padding: 6px 8px;
+	border-radius: 8px;
+	box-sizing: border-box;
+}
+
+.full-width-table td .btn { font-size: 0.95rem; }
 .full-width-table thead tr th { padding: 0.8rem 1rem; opacity: 0.95; color: #3a2e1a; font-weight:700; }
 
 /* Ensure table header doesn't apply a different background */

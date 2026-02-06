@@ -36,6 +36,7 @@ export class AppComponent {
     return this.notificationService.notifications$;
   }
   constructor(private itemsService: ItemsService, private notificationService: NotificationService) {
+    // menu is always open — no persisted collapsed state
     // subscribe to edits from ItemsService
     this.itemsService.edit$.subscribe(item => {
       this.currentEdit = item || null;

@@ -188,7 +188,6 @@ label {
   /* match global background and remove border to blend with page */
   /* vertical gradient: darker at top, lighter at bottom */
   background: var(--menu-solid);
-  border-right: none;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -207,6 +206,18 @@ label {
   flex: 0 0 auto; /* do not stretch - keep buttons near top under logo */
   margin-top: 8px; /* small space under logo */
 }
+
+/* collapsed state: only icons and small logo visible */
+.side-menu.collapsed {
+  width: 72px !important;
+  padding: 1.25rem 0.6rem !important;
+}
+.side-menu.collapsed .logo-area { padding: 6px 0; }
+.side-menu.collapsed .logo-img { width: 72px; height: auto; display: block; margin: 0 auto; }
+.side-menu.collapsed .menu-btn { justify-content: center; padding: 10px; min-width: 48px; border-radius: 10px; }
+.side-menu.collapsed .menu-btn span { display: none !important; }
+.side-menu.collapsed .menu-btn svg { margin: 0; }
+/* menu toggle removed by user preference */
 
 /* ensure the page body uses the same lighter beige */
 /* ensure the page body uses the same gradient as the side menu so the whole app background matches */
@@ -521,6 +532,15 @@ body.black-theme .logo-light {
   padding: 26px 30px; /* slightly more inner padding */
   border: none !important;
   box-shadow: 0 10px 24px rgba(24,18,12,0.06); /* stronger soft shadow for panel edges */
+}
+
+/* Keep the add form visible while the page scrolls ---------------------------------- */
+.form-card {
+  position: sticky;
+  top: 110px; /* distance from top of viewport (adjust if you have a header) */
+  z-index: 30;
+  max-height: calc(100vh - 140px); /* allow internal scrolling if form is tall */
+  overflow: auto;
 }
 /* --- Apply form visuals to table card --- */
 .table-card {

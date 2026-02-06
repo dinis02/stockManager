@@ -55,17 +55,24 @@
 .form-card .inventory-form textarea {
   /* use global minimal input styles (see src/styles.scss) */
   height: auto;
+  background: var(--panel-bg) !important; /* match normal panel background */
+  border: 1px solid var(--input-border);
+  color: var(--text);
+  font-size: 1.02rem; /* slightly larger text */
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
 }
 
 .form-card .inventory-form textarea {
   min-height: 160px;
   padding: 1.1rem 1.1rem;
   resize: vertical;
-  background: var(--input-bg);
+  background: var(--panel-bg) !important; /* match panel */
   border: 1px solid var(--input-border);
   color: var(--text);
+  font-size: 1.02rem;
   border-radius: 20px; /* more rounded corners for Observações */
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 /* Save button: centered, subtle */
@@ -91,6 +98,15 @@
 
 /* Make sure form area has breathing room inside the outer glass card */
 .form-card { margin-bottom: 18px; }
+
+/* make the form card stick to the top of the viewport when scrolling */
+.form-card {
+  position: sticky;
+  top: 92px; /* offset to sit below header/menu as needed */
+  z-index: 40;
+  max-height: calc(100vh - 112px);
+  overflow: auto;
+}
 
 /* Small toast for success messages */
 .inventory-form__toast {
