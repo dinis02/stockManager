@@ -4,10 +4,16 @@
 	<div class="logo-area">
 		<img src="/assets/logo_transp.png" alt="Logo" class="logo-img" />
 	</div>
-	<nav>
-		<button class="menu-btn" (click)="select('add')">Adicionar</button>
-		<button class="menu-btn" (click)="select('table')">Tabela</button>
-	</nav>
+		<nav>
+				<button class="menu-btn" [class.active]="view==='add'" (click)="select('add')">
+					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v6h6a2 2 0 0 1 0 4h-6v6a2 2 0 0 1-4 0v-6H4a2 2 0 0 1 0-4h6V4a2 2 0 0 1 2-2z"/></svg>
+					<span>Adicionar</span>
+				</button>
+				<button class="menu-btn" [class.active]="view==='table'" (click)="select('table')">
+					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+					<span>Tabela</span>
+				</button>
+		</nav>
 </aside>
 
 <main class="main-content-with-menu">

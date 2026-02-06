@@ -2,23 +2,21 @@ input, select, textarea, button {
   /* allow transparency by default; specific components will set readable backgrounds */
   background: transparent !important;
   color: #222 !important;
-  border: 1px solid #888 !important;
+  border: 1px solid #ffffff !important;
   box-shadow: none !important;
   opacity: 1 !important;
 }
 :root {
-  /* lighter beige theme for clearer background */
-  --bg-beige: #dfd6bf; /* lighter beige */
+  /* global green palette based on provided image (solid olive) */
+  --menu-solid: #6f8f85; /* primary solid olive colour */
+  --bg-beige: var(--menu-solid); /* page background uses same solid */
   --panel-bg: rgba(255,255,255,0.22); /* brighter panel */
   --input-bg: #ffffff; /* inputs pure white */
   --input-border: rgba(46,33,19,0.16); /* stronger input border tone */
-  --accent: #8a6a41;
-  --accent-strong: #6f4e2f;
-  --muted: #9a8f7c;
-  --text: #3a2e1a;
-  /* side menu gradient colors */
-  --menu-gradient-start: rgba(188,163,120,0.98); /* darker top */
-  --menu-gradient-end: rgba(223,214,191,0.98); /* lighter bottom */
+  --accent: #8aa66a;
+  --accent-strong: #6f8a55;
+  --muted: #7b9a7a;
+  --text: #23351f;
 }
 
 /* Modern / Minimal label + input system */
@@ -129,7 +127,17 @@ input, select, textarea, button {
 .table-card .full-width-table thead th { color: rgba(255,255,255,0.85); font-size: 0.9rem; }
 .table-card .full-width-table tbody tr { background: transparent; }
 .full-width-table tbody tr td { padding: 0.9rem 1rem; }
-.full-width-table tbody tr td button { float: right; background: rgba(255,255,255,0.16); color: #222; }
+.full-width-table tbody tr td button {
+  float: right;
+  background: rgba(255,255,255,0.16);
+  color: #ffffff;
+  border: 1px solid #ffffff !important;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 .glass-card { max-width: 1100px; }
 
@@ -160,10 +168,10 @@ label {
 .main-content-with-menu {
   margin-left: 220px;
   padding: 3.5rem 3.5rem 2.5rem 3.5rem; /* increased padding so content doesn't touch edges */
-  /* match side-menu background so main area and menu share the same visual */
-  background: linear-gradient(180deg, var(--menu-gradient-start) 0%, var(--menu-gradient-end) 100%) !important;
+  /* match side-menu background so main area and menu share the same visual (solid) */
+  background: var(--menu-solid) !important;
   background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
+  background-attachment: scroll !important;
   min-height: 100vh;
   width: auto;
   display: block;
@@ -179,7 +187,7 @@ label {
   padding: 2rem 1rem;
   /* match global background and remove border to blend with page */
   /* vertical gradient: darker at top, lighter at bottom */
-  background: linear-gradient(180deg, var(--menu-gradient-start) 0%, var(--menu-gradient-end) 100%);
+  background: var(--menu-solid);
   border-right: none;
   display: flex;
   flex-direction: column;
@@ -191,22 +199,119 @@ label {
 /* ensure the page body uses the same lighter beige */
 /* ensure the page body uses the same gradient as the side menu so the whole app background matches */
 body {
-  background: linear-gradient(180deg, var(--menu-gradient-start) 0%, var(--menu-gradient-end) 100%);
+  background: var(--menu-solid);
 }
 .side-menu .logo-area { width: 100%; display:flex; justify-content:center; }
 .menu-btn {
   width: 100%;
   background: transparent;
-  border: none;
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  color: #3a2e1a;
-  font-weight: 600;
+  border: 1px solid #ffffff !important; /* white border for menu buttons */
+  border-radius: 999px; /* pill */
+  padding: 0.9rem 1.25rem;
+  color: #ffffff; /* menu text white */
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease, border-color 120ms ease;
 }
-.menu-btn:hover { background: rgba(255,255,255,0.06); }
+.menu-btn:hover { background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+
+.menu-btn svg { width: 20px; height: 20px; display: block; fill: currentColor; opacity: 0.95; }
+.menu-btn span { display: inline-block; font-size: 0.98rem; }
+
+.menu-btn.active {
+  background: linear-gradient(90deg, rgba(138,106,65,0.12), rgba(138,106,65,0.06));
+  box-shadow: 0 6px 18px rgba(111,78,47,0.06);
+  color: #ffffff; /* keep active text white */
+  border-color: #ffffff !important;
+}
+/* Force white text/icons in the side menu (higher specificity to override other rules) */
+.side-menu .menu-btn,
+.side-menu .menu-btn span {
+  color: #ffffff !important;
+}
+.side-menu .menu-btn svg {
+  fill: #ffffff !important;
+}
+
+/* Ensure all buttons across the app use white text/icons for contrast */
+button, .btn, .menu-btn {
+  color: #ffffff !important;
+}
+button svg, .btn svg, .menu-btn svg {
+  fill: #ffffff !important;
+}
 td, th, .full-width-table td, .full-width-table th {
   color: #fff !important;
 }
+
+/* Minimal modern button system */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 0.78rem;
+  border-radius: 999px; /* pill like side menu */
+  background: transparent;
+  border: 1px solid #ffffff !important;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 140ms ease, background 120ms ease, color 120ms ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn--sm { padding: 0.22rem 0.48rem; border-radius: 7px; font-size: 0.9rem; }
+
+/* Pill primary */
+.btn--pill {
+  border-radius: 999px;
+  padding: 0.38rem 1rem;
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, rgba(138,106,65,1), rgba(111,78,47,1));
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 18px rgba(111,78,47,0.12);
+}
+.btn--primary:hover { filter: brightness(1.04); }
+
+/* Outline / ghost */
+.btn--outline {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid #ffffff !important;
+  color: #ffffff;
+}
+.btn--outline:hover { background: rgba(255,255,255,0.06); }
+
+.btn--ghost {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.92);
+}
+.btn--ghost:hover { background: rgba(255,255,255,0.03); }
+
+/* Small icon-only button */
+.btn--icon {
+  padding: 0.28rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  justify-content: center;
+}
+.btn svg { width: 16px; height: 16px; display: block; fill: currentColor; }
+
+/* subdued danger */
+.btn--danger {
+  background: linear-gradient(180deg, rgba(255,107,107,0.95), rgba(232,92,92,0.95));
+  color: #fff;
+  border: none;
+}
+.btn--danger:hover { filter: brightness(0.98); }
 .fixed-header {
   position: fixed;
   top: 0;
@@ -319,12 +424,17 @@ body.black-theme .logo-light {
   background: var(--panel-bg);
   border-radius: 14px;
   padding: 26px 30px; /* slightly more inner padding */
-  border: 1px solid var(--input-border);
+  border: none !important;
   box-shadow: 0 10px 24px rgba(24,18,12,0.06); /* stronger soft shadow for panel edges */
 }
 /* --- Apply form visuals to table card --- */
 .table-card {
-  /* keep existing panel settings (already set elsewhere) */
+  /* use same panel background as the form for a consistent look */
+  background: var(--panel-bg) !important;
+  border-radius: 14px;
+  padding: 26px 30px;
+  border: none !important;
+  box-shadow: 0 10px 24px rgba(24,18,12,0.06);
 }
 
 .table-card label,
@@ -346,7 +456,7 @@ body.black-theme .logo-light {
 .table-card .full-width-table textarea {
   background: transparent !important;
   color: #ffffff !important;
-  border: 1px solid var(--input-border) !important;
+  border: 1px solid #ffffff !important;
   padding: var(--input-minimal-padding) !important;
   border-radius: var(--input-minimal-radius) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
@@ -420,6 +530,40 @@ table, table * {
 
 .inventory-form button {
   color: #fff !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid #ffffff !important;
+  background: transparent;
+}
+
+/* Make inputs in the form pill-shaped to match menu and buttons */
+.form-card .inventory-form input,
+.form-card .inventory-form select,
+.form-card .inventory-form textarea,
+.inventory-form input,
+.inventory-form select,
+.inventory-form textarea {
+  /* moderate rounding to match buttons but not fully pill-shaped */
+  border-radius: 16px !important;
+  padding: 0.75rem 1rem !important;
+  border: 1px solid #ffffff !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  min-height: 44px; /* ensure sufficient height for rounded look */
+}
+
+/* Reduce vertical gap between Observações (textarea) and the Save button */
+.form-card .inventory-form textarea {
+  margin-bottom: 8px !important;
+  min-height: 120px; /* keep readable size */
+}
+
+.form-card .inventory-form button {
+  margin-top: 6px !important;
 }
 // Forçar texto branco em todos os labels, inputs e placeholders do formulário
 .inventory-form label,
@@ -449,7 +593,7 @@ select,
 textarea {
   background: var(--input-bg);
   border-radius: var(--input-radius);
-  border: 1px solid var(--input-border);
+  border: 1px solid #ffffff !important;
   padding: var(--input-padding);
   outline: none;
   transition: box-shadow 160ms ease, transform 120ms ease, border-color 120ms ease;
@@ -545,7 +689,7 @@ textarea {
      .form-card/.table-card background shows through */
   background: transparent !important;
   color: var(--text) !important; /* use theme text color on panel */
-  border-color: var(--input-border) !important;
+  border-color: #ffffff !important;
 }
 
 /* Make input text and placeholders white inside form and table panels as requested */
@@ -628,7 +772,7 @@ textarea {
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #b7ac98;
+  background: var(--menu-solid);
   color: #222;
   min-height: 100vh;
 }
@@ -639,10 +783,10 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  /* use the same vertical gradient as the side-menu so the fixed background matches */
-  background: linear-gradient(180deg, var(--menu-gradient-start) 0%, var(--menu-gradient-end) 100%);
+  /* use the same solid colour as the side-menu so the fixed background matches */
+  background: var(--menu-solid);
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll;
   z-index: 0;
   pointer-events: none; /* allow clicks through to app content */
 }
@@ -823,29 +967,33 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 2px 12px 0 rgba(80,80,80,0.13);
 }
 
+/* Make native button tag match the menu/.btn pill style */
 button {
-  background: #e5ddce;
-  color: #3a2e1a;
-  border: 1.5px solid #cfc2a8;
-  border-radius: 10px;
-  padding: 0.7rem 1.5rem;
-  font-size: 1.08rem;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #ffffff !important;
+  font-size: 1.02rem;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 1px 6px 0 rgba(80,80,80,0.07);
-  transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+  box-shadow: none;
+  transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease, border-color 120ms ease;
   margin-top: 0.5rem;
 }
 
 button:hover {
-  background: #f5f2ec;
-  border-color: #b7ac98;
-  color: #3a2e1a;
-  box-shadow: 0 2px 12px 0 rgba(80,80,80,0.13);
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.28);
 }
 
 button:disabled {
-  background: #ccc;
+  background: rgba(255,255,255,0.02);
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -874,5 +1022,22 @@ button:disabled {
   .main-content-with-menu {
     margin-left: 0;
     padding: 1rem;
+  }
+
+  /* Hide all placeholder text globally as requested */
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder,
+  input::-webkit-input-placeholder,
+  textarea::-webkit-input-placeholder,
+  select::-webkit-input-placeholder,
+  input::-moz-placeholder,
+  textarea::-moz-placeholder,
+  select::-moz-placeholder,
+  input:-ms-input-placeholder,
+  textarea:-ms-input-placeholder,
+  select:-ms-input-placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
   }
 }

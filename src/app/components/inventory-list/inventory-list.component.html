@@ -15,18 +15,44 @@
     </thead>
     <tbody>
       <tr *ngFor="let i of items">
-        <td>{{ i.date }}</td>
-        <td>{{ i.name }}</td>
-        <td>{{ i.brand }}</td>
-        <td>{{ i.category }}</td>
-        <td>{{ i.quantity }}</td>
-        <td>{{ i.unit }}</td>
-        <td>{{ i.supplier }}</td>
-        <td>{{ i.price }}</td>
-        <td>
-          <button (click)="edit(i)">Editar</button>
-          <button (click)="remove(i.id)">Apagar</button>
-        </td>
+        <ng-container *ngIf="editingId !== i.id; else editRow">
+          <td>{{ i.date }}</td>
+          <td>{{ i.name }}</td>
+          <td>{{ i.brand }}</td>
+          <td>{{ i.category }}</td>
+          <td>{{ i.quantity }}</td>
+          <td>{{ i.unit }}</td>
+          <td>{{ i.supplier }}</td>
+          <td>{{ i.price }}</td>
+          <td>
+            <button class="btn btn--outline btn--sm btn--icon" (click)="edit(i)" aria-label="Editar" title="Editar">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/></svg>
+            </button>
+            <button class="btn btn--danger btn--sm" (click)="remove(i.id)" aria-label="Apagar">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-template #editRow>
+          <td><input [(ngModel)]="editModel.date" type="date" /></td>
+          <td><input [(ngModel)]="editModel.name" /></td>
+          <td><input [(ngModel)]="editModel.brand" /></td>
+          <td><input [(ngModel)]="editModel.category" /></td>
+          <td><input [(ngModel)]="editModel.quantity" type="number" /></td>
+          <td><input [(ngModel)]="editModel.unit" /></td>
+          <td><input [(ngModel)]="editModel.supplier" /></td>
+          <td><input [(ngModel)]="editModel.price" type="number" step="0.01" /></td>
+          <td>
+            <button class="btn btn--primary btn--sm btn--pill" (click)="saveEdit()" aria-label="Guardar">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span>Guardar</span>
+            </button>
+            <button class="btn btn--ghost btn--sm" (click)="cancelEdit()" aria-label="Cancelar">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.3 10.59 10.59 16.88 4.3z"/></svg>
+            </button>
+          </td>
+        </ng-template>
       </tr>
       <tr *ngIf="!items || items.length === 0">
         <td colspan="9">Sem itens</td>

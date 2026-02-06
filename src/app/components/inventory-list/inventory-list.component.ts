@@ -3,11 +3,12 @@ import { Subscription } from 'rxjs';
 import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-inventory-list',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss']
 })
@@ -15,6 +16,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   items: any[] = [];
   loading = false;
   private subs: Subscription | null = null;
+  // inline edit state
+  editingId: any = null;
+  editModel: any = null;
 
   constructor(private itemsService: ItemsService, private http: HttpClient) {}
 
@@ -36,6 +40,62 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     try {
       if (this.subs) this.subs.unsubscribe();
     } catch (e) {}
+  }
+
+  // start inline editing for a row
+  edit(item: any) {
+    this.editingId = item.id;
+    // shallow copy to edit safely
+    this.editModel = { ...item };
+  }
+
+  // cancel inline edit
+  cancelEdit() {
+    this.editingId = null;
+    this.editModel = null;
+  }
+
+  // save inline edit (PUT to server or update localStorage)
+  saveEdit() {
+    if (!this.editModel) return;
+    const id = this.editModel.id;
+    const isLocal = String(id).startsWith('local-');
+    if (isLocal) {
+      try {
+        const raw = localStorage.getItem('items');
+        const list = raw ? JSON.parse(raw) : [];
+        const idx = list.findIndex((it: any) => String(it.id) === String(id));
+        if (idx >= 0) {
+          list[idx] = { ...this.editModel };
+          localStorage.setItem('items', JSON.stringify(list));
+        }
+      } catch (e) {
+        console.error('Failed updating local item', e);
+      }
+      this.cancelEdit();
+      this.load();
+      return;
+    }
+
+    // server-backed item: PUT
+    this.http.put(`/api/items/${Number(id)}`, this.editModel).subscribe({ next: () => {
+      this.cancelEdit();
+      this.load();
+    }, error: (err) => {
+      console.error('Failed PUT during saveEdit', err);
+      // fallback: update locally to avoid data loss
+      try {
+        const raw = localStorage.getItem('items');
+        const list = raw ? JSON.parse(raw) : [];
+        const toSave = { ...this.editModel, id: `local-${Date.now()}` };
+        list.unshift(toSave);
+        localStorage.setItem('items', JSON.stringify(list));
+      } catch (e) {
+        console.error('Failed to fallback-save locally', e);
+      }
+      this.cancelEdit();
+      this.load();
+    }});
   }
 
   load() {
@@ -78,9 +138,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }});
   }
 
-  edit(item: any) {
-    // use the shared service to signal an edit (reliable across lifecycle)
-    this.itemsService.triggerEdit(item);
-  }
+  
 }
 
