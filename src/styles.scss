@@ -305,6 +305,51 @@ td, th, .full-width-table td, .full-width-table th {
 }
 .btn svg { width: 16px; height: 16px; display: block; fill: currentColor; }
 
+/* Ensure all SVG icons are white (buttons, menu, table icons) */
+button svg,
+.btn svg,
+.menu-btn svg,
+.btn--icon-circle svg {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Force calendar/date picker's icon to appear white where possible */
+.form-card .inventory-form input[type="date"]::-webkit-calendar-picker-indicator,
+.table-card input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-clear-button {
+  filter: invert(1) grayscale(1) brightness(2) !important;
+  opacity: 1 !important;
+}
+.form-card .inventory-form input[type="date"]::-moz-calendar-picker-indicator,
+.table-card input[type="date"]::-moz-calendar-picker-indicator {
+  filter: invert(1) grayscale(1) brightness(2) !important;
+  opacity: 1 !important;
+}
+
+/* Circular minimal icon buttons (no visible border) used for edit/delete) */
+.btn--icon-circle {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+.btn--icon-circle svg { width: 18px; height: 18px; }
+.btn--icon-circle:hover { background: rgba(255,255,255,0.08) !important; }
+
+/* Ensure danger variant on icon circle is still minimal (no heavy red bg) */
+.btn--danger.btn--icon-circle {
+  background: rgba(255,255,255,0.04) !important;
+  color: #ffffff !important;
+}
+
 /* subdued danger */
 .btn--danger {
   background: linear-gradient(180deg, rgba(255,107,107,0.95), rgba(232,92,92,0.95));
