@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -67,7 +68,7 @@ export class MyInvFormComponent {
 
   saving = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private itemsService: ItemsService) {}
 
   save() {
     if (!this.item.name || !this.item.quantity) return;
@@ -76,7 +77,7 @@ export class MyInvFormComponent {
       next: () => {
         this.saving = false;
         this.reset();
-        window.dispatchEvent(new Event('itemsChanged'));
+        this.itemsService.triggerRefresh();
       },
       error: () => (this.saving = false)
     });

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { InventoryFormComponent } from './components/inventory-form/inventory-form.component';
 import { InventoryListComponent } from './components/inventory-list/inventory-list.component';
+import { ItemsService } from './services/items.service';
 
 @Component({
   selector: 'app-root',
@@ -14,4 +15,29 @@ import { InventoryListComponent } from './components/inventory-list/inventory-li
 })
 export class AppComponent {
   title = 'stockManager';
+  view: 'add' | 'table' = 'add';
+
+  select(view: 'add' | 'table') {
+    this.view = view;
+    // small UX: scroll to top of main content when switching
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
+    // when switching to the table view, trigger a reload via ItemsService so the list refreshes reliably
+    if (view === 'table') {
+      // trigger immediately and again after a short delay to avoid race conditions
+      this.itemsService.triggerRefresh();
+      setTimeout(() => this.itemsService.triggerRefresh(), 180);
+    }
+  }
+  currentEdit: any = null;
+  constructor(private itemsService: ItemsService) {
+    // subscribe to edits from ItemsService
+    this.itemsService.edit$.subscribe(item => {
+      this.currentEdit = item || null;
+      if (item) this.select('add');
+    });
+    // clear edit when a refresh occurs
+    this.itemsService.refresh$.subscribe(() => {
+      this.currentEdit = null;
+    });
+  }
 }

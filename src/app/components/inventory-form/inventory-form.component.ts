@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -24,25 +25,83 @@ export class InventoryFormComponent {
   };
 
   saving = false;
+  // no UI messages — items should just appear in the list
 
-  constructor(private http: HttpClient) {}
+  @Input()
+  set editItem(value: any) {
+    if (value) {
+      // populate form with a shallow copy
+      this.item = { ...value };
+    }
+  }
+
+  constructor(private http: HttpClient, private itemsService: ItemsService) {}
 
   save() {
-    if (!this.item.name || !this.item.quantity) return;
+    // basic client-side validation
+    if (!this.item.name || !this.item.quantity) {
+      // keep a minimal client-side guard; do not show messages
+      return;
+    }
+
+    console.log('Saving item', this.item);
     this.saving = true;
-    // try to save to backend; if it fails, persist to localStorage as fallback
+    // if item has an id, attempt to update (PUT) on backend or update localStorage
+    if (this.item.id) {
+      const isLocal = String(this.item.id).startsWith('local-');
+      if (isLocal) {
+        // update localStorage entry
+        try {
+          const raw = localStorage.getItem('items');
+          const list = raw ? JSON.parse(raw) : [];
+          const idx = list.findIndex((it: any) => String(it.id) === String(this.item.id));
+          if (idx >= 0) {
+            list[idx] = { ...this.item };
+            localStorage.setItem('items', JSON.stringify(list));
+          } else {
+            list.unshift({ ...this.item });
+            localStorage.setItem('items', JSON.stringify(list));
+          }
+        } catch (e) {
+          console.error('Failed updating local item', e);
+        }
+        this.saving = false;
+        this.reset();
+        this.itemsService.triggerRefresh();
+        return;
+      } else {
+        // attempt PUT to backend for existing server item
+        const id = Number(this.item.id);
+        this.http.put(`/api/items/${id}`, this.item).subscribe({ next: () => {
+          this.saving = false;
+          this.reset();
+          this.itemsService.triggerRefresh();
+        }, error: (err) => {
+          // log the error for debugging and fallback to local save
+          console.error('PUT /api/items/' + id + ' failed', err);
+          // do NOT automatically POST (that would create a duplicate). Save locally as a safe fallback.
+          this.saveToLocal();
+          this.saving = false;
+          this.reset();
+          this.itemsService.triggerRefresh();
+        }});
+        return;
+      }
+    }
+
+    // no id -> create new
     this.http.post('/api/items', this.item).subscribe({
       next: () => {
         this.saving = false;
         this.reset();
-        window.dispatchEvent(new Event('itemsChanged'));
+        this.itemsService.triggerRefresh();
       },
       error: () => {
         // fallback: save locally
         this.saveToLocal();
         this.saving = false;
         this.reset();
-        window.dispatchEvent(new Event('itemsChanged'));
+        this.itemsService.triggerRefresh();
       }
     });
   }

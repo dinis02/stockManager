@@ -5,23 +5,23 @@
 		<img src="/assets/logo_transp.png" alt="Logo" class="logo-img" />
 	</div>
 	<nav>
-		<button class="menu-btn">Adicionar</button>
-		<button class="menu-btn">Tabela</button>
+		<button class="menu-btn" (click)="select('add')">Adicionar</button>
+		<button class="menu-btn" (click)="select('table')">Tabela</button>
 	</nav>
 </aside>
 
 <main class="main-content-with-menu">
-	<h2 class="main-title">Adicionar Produto</h2>
-	<div class="glass-card wide-list-card">
+	<h2 class="main-title" [hidden]="view !== 'add'">Adicionar Produto</h2>
+	<div class="glass-card wide-list-card" [hidden]="view !== 'add'">
 		<section class="inventory-section">
 			<div class="form-card">
-				<app-inventory-form></app-inventory-form>
+				<app-inventory-form [editItem]="currentEdit"></app-inventory-form>
 			</div>
 		</section>
 	</div>
 
-	<h2 class="main-title">Produtos</h2>
-	<div class="glass-card wide-list-card">
+	<h2 class="main-title" [hidden]="view !== 'table'">Produtos</h2>
+	<div class="glass-card wide-list-card" [hidden]="view !== 'table'">
 		<section class="list-section">
 			<div class="table-card">
 				<app-inventory-list></app-inventory-list>

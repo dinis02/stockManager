@@ -71,6 +71,19 @@ input, select, textarea, button {
 .table-card input::placeholder,
 .table-card textarea::placeholder { color: rgba(58,46,26,0.35); font-weight: 500 }
 
+/* Make native date picker/calendar icon appear white */
+.form-card .inventory-form input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) grayscale(1) brightness(2) contrast(1) !important;
+  opacity: 0.95 !important;
+}
+.form-card .inventory-form input[type="date"]::-moz-calendar-picker-indicator {
+  filter: invert(1) grayscale(1) brightness(2) contrast(1) !important;
+  opacity: 0.95 !important;
+}
+.inventory-form input[type="date"] {
+  color: var(--text);
+}
+
 .form-card .inventory-form input:focus,
 .form-card .inventory-form textarea:focus,
 .table-card input:focus,
@@ -107,7 +120,8 @@ input, select, textarea, button {
 .form-card .inventory-form textarea { height: 84px; }
 
 .table-card {
-  background: rgba(199,194,168,0.06);
+  /* Match form-card background so form and table panels share the same visual */
+  background: rgba(183,172,152,0.06);
   border-radius: 12px;
   padding: 12px;
   border: 1px solid rgba(255,255,255,0.04);
@@ -130,9 +144,9 @@ label {
   /* nudge labels to the right to align with input inner text */
   padding-left: 16px !important;
 }
-app-inventory-form, app-inventory-list, .inventory-form, .list-content, .glass-card, .wide-list-card {
+.inventory-form, .list-content, .glass-card, .wide-list-card {
   opacity: 1 !important;
-  display: block !important;
+  /* do not force `display` here so `[hidden]` can hide component hosts correctly */
   visibility: visible !important;
   /* inherit color from context so cards match the main area */
   color: inherit !important;

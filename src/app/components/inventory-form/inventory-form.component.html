@@ -37,6 +37,6 @@
   </label>
 
   <div style="display:flex; justify-content:flex-end;">
-    <button type="submit" [disabled]="saving">Guardar</button>
+    <button type="submit" (click)="save()" [disabled]="saving">Guardar</button>
   </div>
 </form>

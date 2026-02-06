@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -9,24 +11,42 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss']
 })
-export class InventoryListComponent implements OnInit {
+export class InventoryListComponent implements OnInit, OnDestroy {
   items: any[] = [];
   loading = false;
+  private subs: Subscription | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private itemsService: ItemsService, private http: HttpClient) {}
 
   ngOnInit(): void {
+    // initial load
     this.load();
-    window.addEventListener('itemsChanged', () => this.load());
+    // subscribe to the shared ItemsService refresh observable
+    this.subs = this.itemsService.refresh$.subscribe(() => this.load());
+    // if the list is still empty shortly after init, attempt another load (guard against timing)
+    setTimeout(() => {
+      if (!this.items || this.items.length === 0) {
+        console.log('[InventoryList] empty after init, forcing additional load');
+        this.load();
+      }
+    }, 220);
+  }
+
+  ngOnDestroy(): void {
+    try {
+      if (this.subs) this.subs.unsubscribe();
+    } catch (e) {}
   }
 
   load() {
+    console.log('[InventoryList] load() start');
     this.loading = true;
     // try backend first, fallback to localStorage if unavailable
     this.http.get<any[]>('/api/items').subscribe({
       next: data => {
         this.items = data || [];
         this.loading = false;
+        console.log('[InventoryList] load() got', this.items.length, 'items from backend');
       },
       error: () => {
         // backend unavailable -> load from localStorage
@@ -38,6 +58,7 @@ export class InventoryListComponent implements OnInit {
           this.items = [];
         }
         this.loading = false;
+        console.log('[InventoryList] load() fallback to localStorage,', this.items.length, 'items');
       }
     });
   }
@@ -55,6 +76,11 @@ export class InventoryListComponent implements OnInit {
       }
       this.load();
     }});
+  }
+
+  edit(item: any) {
+    // use the shared service to signal an edit (reliable across lifecycle)
+    this.itemsService.triggerEdit(item);
   }
 }
 

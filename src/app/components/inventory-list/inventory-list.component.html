@@ -23,7 +23,10 @@
         <td>{{ i.unit }}</td>
         <td>{{ i.supplier }}</td>
         <td>{{ i.price }}</td>
-        <td><button (click)="remove(i.id)">Apagar</button></td>
+        <td>
+          <button (click)="edit(i)">Editar</button>
+          <button (click)="remove(i.id)">Apagar</button>
+        </td>
       </tr>
       <tr *ngIf="!items || items.length === 0">
         <td colspan="9">Sem itens</td>
