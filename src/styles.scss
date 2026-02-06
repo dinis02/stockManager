@@ -196,6 +196,18 @@ label {
   z-index: 5;
 }
 
+/* Make the nav area take the remaining vertical space and center its buttons */
+.side-menu nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* place buttons right below the logo */
+  align-items: center; /* keep buttons centered horizontally */
+  gap: 12px; /* vertical spacing between buttons */
+  width: 100%;
+  flex: 0 0 auto; /* do not stretch - keep buttons near top under logo */
+  margin-top: 8px; /* small space under logo */
+}
+
 /* ensure the page body uses the same lighter beige */
 /* ensure the page body uses the same gradient as the side menu so the whole app background matches */
 body {
@@ -203,23 +215,26 @@ body {
 }
 .side-menu .logo-area { width: 100%; display:flex; justify-content:center; }
 .menu-btn {
-  width: 100%;
+  width: auto;
+  min-width: 140px; /* keep buttons narrower than full menu width */
   background: transparent;
   border: 1px solid #ffffff !important; /* white border for menu buttons */
   border-radius: 999px; /* pill */
-  padding: 0.9rem 1.25rem;
+  padding: 0.7rem 0.6rem; /* taller (more vertical) and less wide (less horizontal) */
   color: #ffffff; /* menu text white */
   font-weight: 700;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  justify-content: flex-start;
+  gap: 0.5rem; /* smaller gap between icon and text */
+  justify-content: center;
+  margin: 0 auto; /* ensure button block is centered inside side-menu */
+  text-align: center;
   transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease, border-color 120ms ease;
 }
 .menu-btn:hover { background: rgba(255,255,255,0.06); transform: translateY(-1px); }
 
-.menu-btn svg { width: 20px; height: 20px; display: block; fill: currentColor; opacity: 0.95; }
-.menu-btn span { display: inline-block; font-size: 0.98rem; }
+.menu-btn svg { width: 18px; height: 18px; display: inline-block; vertical-align: middle; fill: currentColor; opacity: 0.95; }
+.menu-btn span { display: inline-block; font-size: 0.95rem; text-align: center; width: auto; vertical-align: middle; }
 
 .menu-btn.active {
   background: linear-gradient(90deg, rgba(138,106,65,0.12), rgba(138,106,65,0.06));
