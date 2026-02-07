@@ -42,7 +42,13 @@
           <td><input [(ngModel)]="editModel.date" type="date" /></td>
           <td><input [(ngModel)]="editModel.name" /></td>
           <td><input [(ngModel)]="editModel.brand" /></td>
-          <td><input [(ngModel)]="editModel.category" /></td>
+          <td>
+            <select [(ngModel)]="editModel.category">
+              <option>Outros</option>
+              <option>Shampoo</option>
+              <option>Tratamento</option>
+            </select>
+          </td>
           <td><input [(ngModel)]="editModel.quantity" type="number" /></td>
           <td><input [(ngModel)]="editModel.unit" /></td>
           <td><input [(ngModel)]="editModel.supplier" /></td>
