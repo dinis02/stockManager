@@ -19,6 +19,7 @@ export class InventoryFormComponent {
     brand: '',
     category: 'Outros',
     quantity: 1,
+    min_quantity: 0,
     unit: 'un',
     supplier: '',
     price: null,

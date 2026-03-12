@@ -1,21 +1,45 @@
 <div class="fixed-bg"></div>
 
-<aside class="side-menu">
+<!-- Auth Page (shown when not logged in) -->
+<div *ngIf="!(currentUser$ | async)">
+	<app-auth-page></app-auth-page>
+</div>
+
+<!-- Main App (shown when logged in) -->
+<div *ngIf="currentUser$ | async" class="main-app">
+	<aside class="side-menu">
 	<div class="logo-area">
 		<img src="/assets/logo_transp.png" alt="Logo" class="logo-img" />
 	</div>
-		<nav>
-				<button class="menu-btn" [class.active]="view==='add'" (click)="select('add')">
-					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v6h6a2 2 0 0 1 0 4h-6v6a2 2 0 0 1-4 0v-6H4a2 2 0 0 1 0-4h6V4a2 2 0 0 1 2-2z"/></svg>
-					<span>Adicionar</span>
-				</button>
-				<button class="menu-btn" [class.active]="view==='table'" (click)="select('table')">
-					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-					<span>Tabela</span>
-				</button>
-		</nav>
 
+	<nav>
+		<button class="menu-btn" [class.active]="view==='add'" (click)="select('add')">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v6h6a2 2 0 0 1 0 4h-6v6a2 2 0 0 1-4 0v-6H4a2 2 0 0 1 0-4h6V4a2 2 0 0 1 2-2z"/></svg>
+			<span>Adicionar</span>
+		</button>
+		<button class="menu-btn" [class.active]="view==='table'" (click)="select('table')">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+			<span>Tabela</span>
+		</button>
+		<button class="menu-btn" [class.active]="view==='history'" (click)="select('history')">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm3.5-9a1.5 1.5 0 0 0-1.5-1.5h-2V5.5a1.5 1.5 0 0 0-3 0v5a1.5 1.5 0 0 0 1.5 1.5h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+			<span>Histórico</span>
+		</button>
+		<button class="menu-btn" (click)="showCategoriesModal()">
+			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l1.72-1.34c.15-.12.19-.34.1-.51l-1.63-2.83a.363.363 0 0 0-.52-.1l-2.03 1.59c-.42-.32-.9-.6-1.44-.78L14.4 2.81c-.04-.21-.24-.36-.46-.36h-3.28c-.22 0-.42.15-.46.36L9.9 5.5C9.36 5.68 8.88 5.96 8.46 6.28L6.43 4.69a.361.361 0 0 0-.52.1l-1.63 2.83c-.09.17-.05.39.1.51l1.72 1.34c-.05.3-.07.62-.07.94 0 .32.02.64.07.94L2.38 14.28c-.15.12-.19.34-.1.51l1.63 2.83c.09.17.31.25.52.1l2.03-1.59c.42.32.9.6 1.44.78l.3 2.69c.05.21.24.36.46.36h3.28c.22 0 .42-.15.46-.36l.3-2.69c.54-.18 1.02-.46 1.44-.78l2.03 1.59c.21.16.43.08.52-.1l1.63-2.83c.09-.17.05-.39-.1-.51l-1.72-1.34M12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+			<span>Categorias</span>
+		</button>
+	</nav>
 
+	<div class="menu-footer">
+		<div class="user-info" *ngIf="currentUser$ | async as user">
+			<button class="user-badge" (click)="select('profile')">
+				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+				<span>{{ user }}</span>
+			</button>
+			<button class="menu-btn" (click)="logout()">Sair</button>
+		</div>
+	</div>
 </aside>
 
 <main class="main-content-with-menu">
@@ -32,11 +56,24 @@
 	<div class="glass-card wide-list-card" [hidden]="view !== 'table'">
 		<section class="list-section">
 			<div class="table-card">
-				<app-inventory-list></app-inventory-list>
+				<app-inventory-list (openMovementModal)="openMovement($event)"></app-inventory-list>
 			</div>
 		</section>
 	</div>
+
+	<div [hidden]="view !== 'history'">
+		<app-history-view></app-history-view>
+	</div>
+
+	<div [hidden]="view !== 'profile'">
+		<app-profile-page></app-profile-page>
+	</div>
 </main>
+</div>
+
+<!-- Modals -->
+<app-categories-modal #categoriesModal></app-categories-modal>
+<app-movement-modal #movementModal [item]="selectedItemForMovement"></app-movement-modal>
 
 <!-- Global toast host so notifications show even if a form unmounts -->
 <div class="app-toast-host" *ngIf="notifications$ | async as notes">

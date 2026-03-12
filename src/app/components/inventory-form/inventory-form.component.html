@@ -15,6 +15,9 @@
     <label>Quantidade *
       <input name="quantity" type="number" min="0" [(ngModel)]="item.quantity" required />
     </label>
+    <label>Quantidade mínima
+      <input name="min_quantity" type="number" min="0" [(ngModel)]="item.min_quantity" placeholder="0" />
+    </label>
     <label>Unidade
       <select name="unit" [(ngModel)]="item.unit"><option>un</option><option>ml</option></select>
     </label>

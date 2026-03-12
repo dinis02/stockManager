@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ApplicationRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ApplicationRef, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
@@ -14,12 +14,27 @@ import { FormsModule } from '@angular/forms';
 })
 export class InventoryListComponent implements OnInit, OnDestroy {
   items: any[] = [];
+  filteredItems: any[] = [];
   loading = false;
   private _lastOwnUpdateTs: number | null = null;
   private subs: Subscription | null = null;
   // inline edit state
   editingId: any = null;
   editModel: any = null;
+
+  // Filter and search
+  searchQuery = '';
+  selectedCategory = 'Todos';
+  selectedSupplier = 'Todos';
+  categories: string[] = ['Todos', 'Outros', 'Shampoo', 'Tratamento'];
+  suppliers: string[] = [];
+  
+  // Sorting
+  sortBy = 'name';
+  sortOrder: 'asc' | 'desc' = 'asc';
+
+  // Movement modal integration
+  @Output() openMovementModal = new EventEmitter<any>();
 
   constructor(private itemsService: ItemsService, private http: HttpClient, private cd: ChangeDetectorRef, private appRef: ApplicationRef) {}
 
@@ -165,6 +180,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.http.get<any[]>('/api/items').subscribe({
       next: data => {
         this.items = data || [];
+        this.updateSuppliersList();
+        this.updateFilteredItems();
         this.loading = false;
         console.log('[InventoryList] load() got', this.items.length, 'items from backend');
         try { this.cd.detectChanges(); } catch (e) {}
@@ -179,6 +196,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
           console.error('Failed to read local items', e);
           this.items = [];
         }
+        this.updateSuppliersList();
+        this.updateFilteredItems();
         this.loading = false;
         console.log('[InventoryList] load() fallback to localStorage,', this.items.length, 'items');
         try { this.cd.detectChanges(); } catch (e) {}
@@ -228,6 +247,91 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }});
   }
 
+  // Filter and search methods
+  onSearchChange(): void {
+    this.updateFilteredItems();
+  }
+
+  onCategoryChange(): void {
+    this.updateFilteredItems();
+  }
+
+  onSupplierChange(): void {
+    this.updateFilteredItems();
+  }
+
+  setSortBy(field: string): void {
+    if (this.sortBy === field) {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = field;
+      this.sortOrder = 'asc';
+    }
+    this.updateFilteredItems();
+  }
+
+  private updateFilteredItems(): void {
+    let result = [...this.items];
+
+    // Apply search filter
+    if (this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase();
+      result = result.filter(item =>
+        item.name?.toLowerCase().includes(query) ||
+        item.brand?.toLowerCase().includes(query) ||
+        item.supplier?.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply category filter
+    if (this.selectedCategory !== 'Todos') {
+      result = result.filter(item => item.category === this.selectedCategory);
+    }
+
+    // Apply supplier filter
+    if (this.selectedSupplier !== 'Todos') {
+      result = result.filter(item => item.supplier === this.selectedSupplier);
+    }
+
+    // Apply sorting
+    result.sort((a, b) => {
+      let aVal = a[this.sortBy] || '';
+      let bVal = b[this.sortBy] || '';
+
+      if (typeof aVal === 'string') {
+        aVal = aVal.toLowerCase();
+        bVal = bVal.toLowerCase();
+      }
+
+      let comparison = 0;
+      if (aVal < bVal) comparison = -1;
+      else if (aVal > bVal) comparison = 1;
+
+      return this.sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    this.filteredItems = result;
+    try { this.cd.detectChanges(); } catch (e) {}
+  }
+
+  isLowStock(item: any): boolean {
+    return item.min_quantity && item.quantity < item.min_quantity;
+  }
+
+  showMovementModal(item: any): void {
+    this.openMovementModal.emit(item);
+  }
+
+  private updateSuppliersList(): void {
+    const suppliers = new Set<string>();
+    suppliers.add('Todos');
+    this.items.forEach(item => {
+      if (item.supplier) {
+        suppliers.add(item.supplier);
+      }
+    });
+    this.suppliers = Array.from(suppliers).sort();
+  }
 
   
 }
