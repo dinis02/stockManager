@@ -43,16 +43,21 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: none;
-      border: none;
+      background: none !important;
+      border: none !important;
+      outline: none !important;
       padding: 0;
       cursor: pointer;
       color: inherit;
       font: inherit;
-      transition: opacity 0.2s;
+      box-shadow: none !important;
 
       &:hover {
-        opacity: 0.8;
+        /* sem alteração visual no hover */
+      }
+
+      &:focus {
+        outline: none !important;
       }
     }
 
@@ -69,6 +74,16 @@
     .menu-btn {
       min-width: auto;
       padding: 0.6rem 1.2rem;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 }

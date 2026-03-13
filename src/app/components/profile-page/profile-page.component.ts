@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +11,8 @@ import { NotificationService } from '../../services/notification.service';
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.scss']
 })
-export class ProfilePageComponent {
+
+export class ProfilePageComponent implements OnInit {
   editName = '';
   editEmail = '';
   currentPassword = '';
@@ -19,21 +20,34 @@ export class ProfilePageComponent {
   confirmPassword = '';
   loading = false;
 
-  get currentUser$() {
-    return this.authService.currentUser$;
-  }
-
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService
-  ) {
-    // Initialize with current user
+  ) {}
+
+  ngOnInit(): void {
+    // Get current user immediately if available
+    const currentUser = this.authService.getCurrentUser();
+    console.log('Profile - Current user from service:', currentUser);
+    if (currentUser) {
+      this.editName = currentUser;
+      this.editEmail = `${currentUser}@example.com`;
+      console.log('Profile - Email set to:', this.editEmail);
+    }
+
+    // Subscribe to future changes
     this.authService.currentUser$.subscribe(user => {
+      console.log('Profile - User changed:', user);
       if (user) {
         this.editName = user;
-        this.editEmail = `${user}@example.com`; // Simulated email
+        this.editEmail = `${user}@example.com`;
+        console.log('Profile - Email updated to:', this.editEmail);
       }
     });
+  }
+
+  get currentUser$() {
+    return this.authService.currentUser$;
   }
 
   updateProfile(): void {
