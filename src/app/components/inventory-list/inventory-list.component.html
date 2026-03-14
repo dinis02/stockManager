@@ -76,7 +76,7 @@
           <td class="notes-cell" [attr.data-tooltip]="i.notes"><span class="cell-text">{{ i.notes }}</span></td>
           <td class="actions-cell">
             <button 
-              class="btn btn--icon-circle btn--sm btn--success" 
+              class="btn btn--icon-circle btn--success" 
               (click)="showMovementModal(i)" 
               aria-label="Registar movimento" 
               title="Registar entrada/saída"
@@ -84,11 +84,11 @@
               <!-- Arrow icon for movement -->
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-5 9h-3v3H8l4-4 4 4h-3v-3z"/></svg>
             </button>
-            <button class="btn btn--icon-circle btn--sm" (click)="edit(i)" aria-label="Editar" title="Editar">
+            <button class="btn btn--icon-circle" (click)="edit(i)" aria-label="Editar" title="Editar">
               <!-- Minimal pencil icon -->
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/></svg>
             </button>
-            <button class="btn btn--icon-circle btn--sm btn--danger" (click)="remove(i.id)" aria-label="Apagar" title="Apagar">
+            <button class="btn btn--icon-circle btn--danger" (click)="remove(i.id)" aria-label="Apagar" title="Apagar">
               <!-- Minimal trash icon -->
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
             </button>
@@ -112,10 +112,10 @@
           <td><input [(ngModel)]="editModel.price" type="number" step="0.01" /></td>
           <td><input [(ngModel)]="editModel.notes" /></td>
           <td class="actions-cell">
-            <button class="btn btn--icon-circle btn--sm btn--primary" (click)="saveEdit()" aria-label="Guardar" title="Guardar">
+            <button class="btn btn--icon-circle btn--primary" (click)="saveEdit()" aria-label="Guardar" title="Guardar">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
             </button>
-            <button class="btn btn--icon-circle btn--sm btn--ghost" (click)="cancelEdit()" aria-label="Cancelar" title="Cancelar">
+            <button class="btn btn--icon-circle btn--ghost" (click)="cancelEdit()" aria-label="Cancelar" title="Cancelar">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.3 10.59 10.59 16.88 4.3z"/></svg>
             </button>
           </td>

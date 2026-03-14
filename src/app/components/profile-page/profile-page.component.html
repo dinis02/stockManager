@@ -1,30 +1,32 @@
-<form class="profile-form" (ngSubmit)="updatePassword()">
-  <div class="form-row">
-    <label>Email *
-      <input name="email" [(ngModel)]="editEmail" required placeholder="seu@email.com" />
-    </label>
-  </div>
+<div class="form-card">
+  <form class="profile-form" (ngSubmit)="updatePassword()">
+    <div class="form-row">
+      <label>Email *
+        <input name="email" [(ngModel)]="editEmail" required placeholder="seu@email.com" />
+      </label>
+    </div>
 
-  <div class="form-row">
-    <label>Palavra-passe Atual *
-      <input name="currentPassword" type="password" [(ngModel)]="currentPassword" required placeholder="••••••••" />
-    </label>
-    <label>Nova Palavra-passe *
-      <input name="newPassword" type="password" [(ngModel)]="newPassword" required placeholder="••••••••" />
-    </label>
-  </div>
+    <div class="form-row">
+      <label>Palavra-passe Atual *
+        <input name="currentPassword" type="password" [(ngModel)]="currentPassword" required placeholder="••••••••" />
+      </label>
+      <label>Nova Palavra-passe *
+        <input name="newPassword" type="password" [(ngModel)]="newPassword" required placeholder="••••••••" />
+      </label>
+    </div>
 
-  <div class="form-row">
-    <label>Confirmar Palavra-passe *
-      <input name="confirmPassword" type="password" [(ngModel)]="confirmPassword" required placeholder="••••••••" />
-    </label>
-  </div>
+    <div class="form-row">
+      <label>Confirmar Palavra-passe *
+        <input name="confirmPassword" type="password" [(ngModel)]="confirmPassword" required placeholder="••••••••" />
+      </label>
+    </div>
 
-  <button 
-    type="submit"
-    [disabled]="loading"
-    class="save-btn"
-  >
-    {{ loading ? 'A atualizar...' : 'Guardar' }}
-  </button>
-</form>
+    <button 
+      type="submit"
+      [disabled]="loading"
+      class="save-btn"
+    >
+      {{ loading ? 'A atualizar...' : 'Guardar' }}
+    </button>
+  </form>
+</div>

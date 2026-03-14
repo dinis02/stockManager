@@ -1,3 +1,13 @@
+/* Form Card: same style as in inventory-form */
+.form-card {
+  background: var(--panel-bg) !important;
+  border-radius: 14px;
+  padding: 26px 30px;
+  border: 1px solid var(--input-border);
+  box-shadow: 0 10px 24px rgba(24, 18, 12, 0.06);
+  margin-bottom: 18px;
+}
+
 /* Layout */
 .profile-form { width: 100%; }
 .profile-form .form-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }

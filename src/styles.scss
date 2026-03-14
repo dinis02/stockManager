@@ -357,6 +357,8 @@ input[type="date"]::-webkit-clear-button {
 .btn--icon-circle {
   width: 40px !important;
   height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
   padding: 0 !important;
   border-radius: 50% !important;
   display: inline-flex !important;
@@ -366,17 +368,54 @@ input[type="date"]::-webkit-clear-button {
   border: none !important;
   color: #ffffff !important;
   box-shadow: none !important;
+  margin: 0 !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
 }
-.btn--icon-circle svg { width: 18px; height: 18px; }
-.btn--icon-circle:hover { background: rgba(255,255,255,0.08) !important; }
 
-/* Increase spacing between icon action buttons in table rows */
-.full-width-table tbody tr td .btn--icon-circle {
-  margin-left: 12px !important;
+.btn--icon-circle svg { 
+  width: 20px !important; 
+  height: 20px !important; 
+  min-width: 20px !important;
+  min-height: 20px !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.btn--icon-circle:hover { 
+  background: rgba(255,255,255,0.08) !important; 
+}
+
+.btn--icon-circle:active {
+  transform: scale(0.95) !important;
+}
+
+/* Actions cell: flex layout for proper icon spacing */
+.actions-cell {
+  display: flex !important;
+  gap: 0 !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
 }
 
 /* Ensure danger variant on icon circle is still minimal (no heavy red bg) */
 .btn--danger.btn--icon-circle {
+  background: rgba(255,255,255,0.04) !important;
+  color: #ffffff !important;
+}
+
+.btn--success.btn--icon-circle {
+  background: rgba(255,255,255,0.04) !important;
+  color: #ffffff !important;
+}
+
+.btn--primary.btn--icon-circle {
+  background: rgba(255,255,255,0.04) !important;
+  color: #ffffff !important;
+}
+
+.btn--ghost.btn--icon-circle {
   background: rgba(255,255,255,0.04) !important;
   color: #ffffff !important;
 }
