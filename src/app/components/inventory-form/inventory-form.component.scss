@@ -1,7 +1,7 @@
 /* Layout */
 .inventory-form { width: 100%; }
-.inventory-form .form-row { display:flex; gap:1.5rem; flex-wrap:wrap; }
-.inventory-form label { display:block; flex:1 1 220px; margin-bottom: calc(0.9rem + 5px); }
+.inventory-form .form-row { display:flex; gap:1rem; flex-wrap:wrap; }
+.inventory-form label { display: block; margin-bottom: calc(0.6rem + 4px); font-size: 0.92rem; }
 
 /* Make the Observações label white and slightly lower (more space above textarea) */
 .inventory-form > label:last-of-type {
@@ -13,13 +13,14 @@
 
 /* Ensure the full-width Observações label + textarea are visually white */
 .inventory-form > label[style*="width: 100%"] {
-  color: #ffffff !important;
+  /* Use the same dark-muted label color as other form labels */
+  color: var(--label-muted) !important;
   margin-bottom: calc(0.9rem + 5px);
   font-weight: 600;
 }
 .inventory-form > label[style*="width: 100%"] textarea {
   background: var(--input-bg);
-  color: #3a2e1a;
+  color: var(--input-text);
   border: 1px solid var(--input-border);
   border-radius: 12px;
   padding: 0.8rem 1rem;
@@ -30,12 +31,12 @@
 
 /* Card style to match photo: inner white rounded panel */
 .form-card {
-  /* make the panel semi-transparent so the beige background shows through */
-  background: rgba(255,255,255,0.14);
-  border-radius: 14px;
-  padding: 20px 22px;
-  border: 1px solid var(--input-border);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.02) inset;
+  /* Panel: white canvas, visible border, no heavy shadows for a flat look */
+  background: #ffffff !important;
+  border-radius: 10px;
+  padding: 14px 16px; /* smaller padding so inner elements feel compact */
+  border: 1px solid #111; /* clear dark border */
+  box-shadow: none !important; /* remove glass/ambient shadows */
 }
 
 .form-card .inventory-form { gap: 1rem; }
@@ -43,57 +44,62 @@
 
 /* Inputs: long white bars with larger radius */
 .form-card {
-  /* match table card: use the shared panel background and consistent visuals */
-  background: var(--panel-bg) !important;
-  border-radius: 14px;
-  padding: 26px 30px; /* align with global form/table padding */
-  border: 1px solid var(--input-border);
-  box-shadow: 0 10px 24px rgba(24,18,12,0.06);
+  /* Ensure consistent panel: white and flat (no ambient shadow) */
+  background: #ffffff !important;
+  border-radius: 10px;
+  padding: 18px 20px; /* align with global form/table padding but compact */
+  border: 1px solid #111;
+  box-shadow: none !important;
 }
 .form-card .inventory-form input,
 .form-card .inventory-form select,
 .form-card .inventory-form textarea {
-  /* use global minimal input styles (see src/styles.scss) */
+  /* compact input styles */
   height: auto;
   background: var(--panel-bg) !important; /* match normal panel background */
   border: 1px solid var(--input-border);
-  color: var(--text);
-  font-size: 1.02rem; /* slightly larger text */
-  padding: 0.8rem 0.9rem;
-  border-radius: 12px;
+  color: var(--input-text) !important;
+  font-size: 0.95rem; /* slightly smaller text */
+  padding: 0.45rem 0.6rem; /* less vertical and horizontal padding */
+  border-radius: 8px; /* smaller radius */
 }
 
 .form-card .inventory-form textarea {
-  min-height: 160px;
-  padding: 1.1rem 1.1rem;
+  min-height: 110px;
+  padding: 0.8rem 0.9rem;
   resize: vertical;
-  background: var(--panel-bg) !important; /* match panel */
-  border: 1px solid var(--input-border);
-  color: var(--text);
-  font-size: 1.02rem;
-  border-radius: 20px; /* more rounded corners for Observações */
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  background: #ffffff !important; /* match panel */
+  border: 1px solid #111;
+  color: var(--input-text) !important;
+  font-size: 0.95rem;
+  border-radius: 8px; /* rounded corners for Observações */
+  box-shadow: none !important;
 }
 
 /* Save button: centered, subtle */
 .form-card .inventory-form .save-btn,
 .form-card button[type="submit"] {
   display: inline-block;
-  margin: 14px 0 0 0;
-  padding: 10px 18px;
-  min-width: 140px;
+  margin: 10px 0 0 0;
+  padding: 8px 18px !important;
+  min-width: 120px;
   height: auto;
-  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
-  border: none;
-  color: #fff;
-  border-radius: 10px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  box-shadow: 0 6px 18px rgba(111,78,47,0.12);
+  background: linear-gradient(90deg, #0b0f22 0%, #0f1328 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 999px !important; /* fully pill-shaped */
+  font-weight: 800 !important;
+  font-size: 0.94rem !important;
+  letter-spacing: 0.3px !important;
+  text-align: center;
+  box-shadow: none !important; /* remove heavy shadow */
+  transition: transform 120ms ease, filter 120ms ease;
 }
 .form-card .inventory-form .save-btn:hover,
 .form-card button[type="submit"]:hover {
   transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: none !important;
 }
 
 /* Make sure form area has breathing room inside the outer glass card */
