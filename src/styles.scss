@@ -48,7 +48,7 @@ body .side-menu .menu-btn {
   color: #8a8a8a !important; /* default inactive grey */
   font-weight: 600 !important;
   gap: 10px !important;
-  border-radius: 12px !important;
+  border-radius: calc(12px * var(--global-radius-factor)) !important;
   text-align: left !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -91,6 +91,43 @@ body .side-menu .menu-btn:hover {
 /* Ensure main content offset matches */
 .main-content-with-menu { margin-left: 180px !important; }
 
+/* Ensure footer icon buttons inside the side-menu are visible and grey by default */
+body .side-menu .menu-footer .icon-btn {
+  background: transparent !important;
+  border: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 6px !important;
+  border-radius: 12px !important;
+  color: #8a8a8a !important;
+  box-shadow: none !important;
+}
+body .side-menu .menu-footer .icon-btn svg,
+body .side-menu .menu-footer .icon-btn svg path,
+body .side-menu .menu-footer .icon-btn svg circle,
+body .side-menu .menu-footer .icon-btn svg g {
+  fill: #8a8a8a !important;
+  stroke: #8a8a8a !important;
+  width: 22px !important;
+  height: 22px !important;
+  opacity: 0.95 !important;
+}
+/* keep footer icons visually identical on hover/focus */
+/* keep footer icons visually identical on hover/focus */
+body .side-menu .menu-footer .icon-btn:hover svg,
+body .side-menu .menu-footer .icon-btn:focus svg {
+  fill: #8a8a8a !important;
+  stroke: #8a8a8a !important;
+}
+
+/* Ensure icon buttons do not display border or shadow on hover (global safety) */
+body .side-menu .menu-footer .icon-btn:hover,
+body .side-menu .menu-footer .icon-btn:focus {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* Ensure hover and active states are identical: darker-left -> lighter-right pill */
 .side-menu .menu-btn:hover,
 .side-menu .menu-btn.active,
@@ -103,6 +140,7 @@ body .side-menu .menu-btn.active {
 }
 
 :root {
+  --global-radius-factor: 1.1; /* increase radii by ~10% */
   /* global green palette based on provided image (solid olive) */
   --menu-solid: #6f8f85; /* primary solid olive colour */
   --bg-beige: var(--menu-solid); /* page background uses same solid */
@@ -122,7 +160,8 @@ body .side-menu .menu-btn.active {
   --label-muted: rgba(58,46,26,0.9);
   --input-text: #4a4a4a;
   --input-minimal-padding: 12px 14px;
-  --input-minimal-radius: 14px;
+  --input-minimal-radius: calc(5px * var(--global-radius-factor)); /* ~10% more rounded */
+  --button-radius: calc(12px * var(--global-radius-factor)); /* ~10% more rounded */
   --input-minimal-border: rgba(58,46,26,0.12);
   --input-minimal-bottom: rgba(58,46,26,0.12);
 }
@@ -202,7 +241,7 @@ body .side-menu .menu-btn.active {
 .form-card {
   /* Flat white panel with clear dark border to match design */
   background: #ffffff !important;
-  border-radius: 12px;
+  border-radius: calc(12px * var(--global-radius-factor));
   padding: 18px;
   border: 1px solid #111 !important;
   box-shadow: none !important;
@@ -224,7 +263,7 @@ body .side-menu .menu-btn.active {
 .table-card {
   /* Match form-card background so form and table panels share the same visual */
   background: rgba(183,172,152,0.06);
-  border-radius: 12px;
+  border-radius: calc(12px * var(--global-radius-factor));
   padding: 12px;
   border: 1px solid rgba(255,255,255,0.04);
 }
@@ -318,7 +357,7 @@ label {
 }
 .side-menu.collapsed .logo-area { padding: 6px 0; }
 .side-menu.collapsed .logo-img { width: 72px; height: auto; display: block; margin: 0 auto; }
-.side-menu.collapsed .menu-btn { justify-content: center; padding: 10px; min-width: 48px; border-radius: 10px; }
+.side-menu.collapsed .menu-btn { justify-content: center; padding: 10px; min-width: 48px; border-radius: 9px; }
 .side-menu.collapsed .menu-btn span { display: none !important; }
 .side-menu.collapsed .menu-btn svg { margin: 0; }
 /* menu toggle removed by user preference */
@@ -399,46 +438,47 @@ td, th, .full-width-table td, .full-width-table th {
 .btn:active { transform: translateY(1px); }
 .btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-.btn--sm { padding: 0.22rem 0.48rem; border-radius: 7px; font-size: 0.9rem; }
+.btn--sm { padding: 0.22rem 0.48rem; border-radius: 6px; font-size: 0.9rem; }
 
 /* Pill primary */
 .btn--pill {
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   padding: 0.38rem 1rem;
 }
 
 /* Primary pill button: match supplied dark pill (icon + text) */
 .btn.btn--primary.btn--pill,
 .btn--primary.btn--pill {
-  background: linear-gradient(90deg, #0b0f22 0%, #0f1328 100%) !important;
+  /* Exact match for attached 'Adicionar' pill */
+  background: linear-gradient(180deg, #0b0f22 0%, #0f1328 100%) !important;
   color: #ffffff !important;
   border: none !important;
-  border-radius: 999px !important;
-  padding: 10px 22px !important;
-  min-width: 140px !important;
+  border-radius: 8px !important; /* tighter radius to match image */
+  height: 44px !important; /* fixed height for consistent visual */
+  padding: 0 24px !important; /* reduced lateral padding to match other buttons */
+  min-width: 120px !important;
   display: inline-flex !important;
+  justify-content: center !important;
   align-items: center !important;
-  gap: 0.6rem !important;
+  gap: 0 !important;
   font-weight: 800 !important;
-  font-size: 1rem !important;
-  box-shadow: 0 10px 26px rgba(3,6,20,0.35) !important;
+  font-size: 1.06rem !important; /* bold, slightly larger */
+  line-height: 1 !important;
+  box-shadow: none !important; /* flat look */
   text-align: center !important;
-  transition: transform 120ms ease, filter 120ms ease, box-shadow 140ms ease !important;
+  letter-spacing: 0.2px !important;
+  transition: filter 120ms ease !important;
 }
 .btn.btn--primary.btn--pill svg,
 .btn--primary.btn--pill svg {
-  width: 18px !important;
-  height: 18px !important;
-  display: inline-block !important;
-  vertical-align: middle !important;
-  fill: #ffffff !important;
-  margin-right: 6px !important;
+  display: none !important; /* no icon inside the pill — text only */
 }
 .btn.btn--primary.btn--pill:hover,
 .btn--primary.btn--pill:hover {
-  transform: translateY(-2px) !important;
-  filter: brightness(1.04) !important;
-  box-shadow: 0 14px 32px rgba(3,6,20,0.38) !important;
+  /* keep hover subtle and flat to match screenshot */
+  transform: none !important;
+  filter: brightness(1.02) !important;
+  box-shadow: none !important;
 }
 
 /* Page canvas behind cards should be white */
@@ -457,6 +497,47 @@ html, body, .main-content, .main-content-with-menu, .app-shell, .fixed-bg, #main
   box-shadow: 0 6px 18px rgba(111,78,47,0.12);
 }
 .btn--primary:hover { filter: brightness(1.04); }
+
+/* Standardize all buttons to match the Guardar pill appearance */
+button, .btn, input[type="submit"], input[type="button"], .btn--primary, .btn--sm {
+  background: linear-gradient(90deg, #0b0f22 0%, #0f1328 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--button-radius) !important;
+  padding: 10px 18px !important;
+  font-weight: 800 !important;
+  font-size: 0.96rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  text-align: center !important;
+  box-shadow: none !important;
+}
+
+/* Make the primary pill button (Guardar) match other buttons with 8px radius */
+.btn.btn--primary.btn--pill,
+.btn--primary.btn--pill {
+  border-radius: 8px !important;
+}
+button svg, .btn svg, input[type="submit"] svg { width: 16px !important; height: 16px !important; margin-right: 6px !important; fill: #fff !important; }
+
+/* Make smaller buttons consistent but slightly reduced */
+.btn--sm { padding: 6px 10px !important; border-radius: calc(var(--button-radius) - 4px) !important; font-size: 0.85rem !important; }
+
+/* Inputs and selects: match Add Product card visuals sitewide */
+body input, body select, body textarea {
+  background: #ffffff !important;
+  border: 1px solid #111 !important;
+  color: var(--input-text) !important;
+  padding: var(--input-minimal-padding) !important;
+  border-radius: var(--input-minimal-radius) !important;
+  font-size: 0.95rem !important;
+  box-shadow: none !important;
+}
+body label { color: var(--label-muted) !important; font-weight: var(--label-weight) !important; font-size: var(--label-size) !important; }
+
+/* Keep native placeholder tone consistent */
+body input::placeholder, body textarea::placeholder, body select::placeholder { color: rgba(58,46,26,0.35) !important; }
 
 /* Outline / ghost */
 .btn--outline {
@@ -970,7 +1051,7 @@ table, table * {
 
 /* Modern input styles (applies across form and list inputs) */
 :root {
-  --input-radius: 12px;
+  --input-radius: calc(12px * var(--global-radius-factor));
   --input-padding: 14px 16px;
   --input-border: rgba(0,0,0,0.12);
   --input-bg: rgba(255,255,255,0.88);
@@ -1489,7 +1570,7 @@ input, textarea, select {
   color: #333333 !important;
   font-weight: 600 !important;
   gap: 12px !important;
-  border-radius: 12px !important;
+  border-radius: calc(12px * var(--global-radius-factor)) !important;
   text-align: left !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1604,4 +1685,35 @@ body .side-menu .menu-btn.active svg {
     color: transparent !important;
     opacity: 0 !important;
   }
+}
+
+/* Global override: force consistent small radius for all inputs, selects, textareas and buttons
+   User requested a uniform `border-radius: 4.4px !important` across form controls and buttons. */
+input, select, textarea, button, .btn, .menu-btn {
+  border-radius: 4.4px !important;
+}
+
+/* High-specificity overrides to catch component-scoped rules that still set other radii.
+   These selectors combine container classes with element selectors to increase specificity
+   above attribute-scoped component styles injected by Angular. */
+body .form-card .inventory-form input,
+body .form-card .inventory-form select,
+body .form-card .inventory-form textarea,
+body .form-card button,
+body .form-card .save-btn,
+body .inventory-form .form-row input,
+body .inventory-form .form-row select,
+body .inventory-form .form-row textarea,
+body .table-card input,
+body .table-card select,
+body .table-card textarea,
+body .full-width-table button,
+body .side-menu .menu-btn,
+body .menu-btn,
+body .btn,
+body button,
+body input,
+body select,
+body textarea {
+  border-radius: 4.4px !important;
 }

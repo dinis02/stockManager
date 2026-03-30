@@ -1,7 +1,7 @@
 /* Layout */
 .inventory-form { width: 100%; }
-.inventory-form .form-row { display:flex; gap:1rem; flex-wrap:wrap; }
-.inventory-form label { display: block; margin-bottom: calc(0.6rem + 4px); font-size: 0.92rem; }
+.inventory-form .form-row { display:flex; gap:0.6rem; flex-wrap:wrap; }
+.inventory-form label { display: block; margin-bottom: calc(0.45rem + 3px); font-size: 0.88rem; }
 
 /* Make the Observações label white and slightly lower (more space above textarea) */
 .inventory-form > label:last-of-type {
@@ -22,7 +22,7 @@
   background: var(--input-bg);
   color: var(--input-text);
   border: 1px solid var(--input-border);
-  border-radius: 12px;
+  border-radius: var(--input-minimal-radius);
   padding: 0.8rem 1rem;
   min-height: 140px;
   resize: vertical;
@@ -33,7 +33,7 @@
 .form-card {
   /* Panel: white canvas, visible border, no heavy shadows for a flat look */
   background: #ffffff !important;
-  border-radius: 10px;
+  border-radius: 11px;
   padding: 14px 16px; /* smaller padding so inner elements feel compact */
   border: 1px solid #111; /* clear dark border */
   box-shadow: none !important; /* remove glass/ambient shadows */
@@ -46,33 +46,39 @@
 .form-card {
   /* Ensure consistent panel: white and flat (no ambient shadow) */
   background: #ffffff !important;
-  border-radius: 10px;
-  padding: 18px 20px; /* align with global form/table padding but compact */
+  border-radius: 8.8px;
+  padding: 12px 14px; /* more compact card padding */
   border: 1px solid #111;
   box-shadow: none !important;
 }
 .form-card .inventory-form input,
 .form-card .inventory-form select,
 .form-card .inventory-form textarea {
-  /* compact input styles */
+  /* extra-compact input styles */
   height: auto;
   background: var(--panel-bg) !important; /* match normal panel background */
   border: 1px solid var(--input-border);
   color: var(--input-text) !important;
-  font-size: 0.95rem; /* slightly smaller text */
-  padding: 0.45rem 0.6rem; /* less vertical and horizontal padding */
-  border-radius: 8px; /* smaller radius */
+  font-size: 0.9rem; /* smaller text */
+  padding: 0.32rem 0.45rem; /* even less padding */
+  border-radius: var(--input-minimal-radius); /* tighter radius */
+}
+
+/* Make the product name input less rounded specifically */
+.form-card .inventory-form input[name="name"],
+.inventory-form input[name="name"] {
+  border-radius: 4.4px !important;
 }
 
 .form-card .inventory-form textarea {
-  min-height: 110px;
-  padding: 0.8rem 0.9rem;
+  min-height: 72px; /* much shorter textarea */
+  padding: 0.4rem 0.5rem;
   resize: vertical;
   background: #ffffff !important; /* match panel */
   border: 1px solid #111;
   color: var(--input-text) !important;
-  font-size: 0.95rem;
-  border-radius: 8px; /* rounded corners for Observações */
+  font-size: 0.9rem;
+  border-radius: var(--input-minimal-radius); /* rounded corners for Observações */
   box-shadow: none !important;
 }
 
@@ -80,16 +86,16 @@
 .form-card .inventory-form .save-btn,
 .form-card button[type="submit"] {
   display: inline-block;
-  margin: 10px 0 0 0;
-  padding: 8px 18px !important;
-  min-width: 120px;
+  margin: 8px 0 0 0;
+  padding: 6px 12px !important;
+  min-width: 100px;
   height: auto;
   background: linear-gradient(90deg, #0b0f22 0%, #0f1328 100%) !important;
   border: none !important;
   color: #ffffff !important;
-  border-radius: 999px !important; /* fully pill-shaped */
+  border-radius: var(--button-radius) !important; /* less-round pill */
   font-weight: 800 !important;
-  font-size: 0.94rem !important;
+  font-size: 0.86rem !important;
   letter-spacing: 0.3px !important;
   text-align: center;
   box-shadow: none !important; /* remove heavy shadow */
@@ -123,7 +129,7 @@
 }
 .toast {
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 11px;
   color: #fff;
   font-weight: 700;
   box-shadow: 0 6px 18px rgba(0,0,0,0.12);
