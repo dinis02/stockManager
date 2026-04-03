@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -9,9 +9,18 @@ import { NotificationService } from '../../services/notification.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './auth-page.component.html',
-  styleUrls: ['./auth-page.component.scss']
+  styleUrls: ['./auth-page.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AuthPageComponent {
+  // Landing page panel state
+  panelOpen = false;
+  activeTab: 'login' | 'register' = 'login';
+
+  togglePanel(): void {
+    this.panelOpen = !this.panelOpen;
+  }
+
   // Register form
   registerName = '';
   registerEmail = '';

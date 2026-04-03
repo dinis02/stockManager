@@ -9,7 +9,27 @@
 <div *ngIf="currentUser$ | async" class="main-app">
 	<aside class="side-menu">
 	<div class="logo-area">
-		<img src="/assets/logo_transp.png" alt="Logo" class="logo-img" />
+		<svg class="sidebar-logo-svg" viewBox="0 0 320 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%"   stop-color="#c97b6e"/>
+					<stop offset="50%"  stop-color="#e8a898"/>
+					<stop offset="100%" stop-color="#c97b6e"/>
+				</linearGradient>
+			</defs>
+			<text x="50%" y="52" text-anchor="middle"
+				font-family="'Dancing Script', 'Brush Script MT', cursive"
+				font-size="52" font-weight="700"
+				fill="url(#rg2)">Stock Manager</text>
+			<text x="50%" y="72" text-anchor="middle"
+				font-family="'Helvetica Neue', Arial, sans-serif"
+				font-size="11" font-weight="400" letter-spacing="6"
+				fill="#e8a898">SIGNATURE</text>
+			<path d="M48 82 Q160 96 272 82" stroke="url(#rg2)" stroke-width="1.2" fill="none"/>
+			<g fill="#e8a898" transform="translate(274,72)">
+				<polygon points="5,0 6.2,3.8 10,3.8 7,6.2 8.1,10 5,7.8 1.9,10 3,6.2 0,3.8 3.8,3.8" opacity="0.9"/>
+			</g>
+		</svg>
 	</div>
 
 	<nav>

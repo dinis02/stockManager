@@ -1,108 +1,141 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-content">
-      <!-- Register Section -->
-      <div class="auth-section">
-        <div class="auth-header">
-          <h2>Criar Conta</h2>
-        </div>
+<div class="landing-page">
 
-        <form class="auth-form" (ngSubmit)="register()">
-          <div class="form-group">
-            <label>Nome Completo *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="registerName" 
-              name="registerName"
-              placeholder="Seu nome"
-              required
-            />
-          </div>
+  <!-- ① Announcement bar -->
+  <div class="announce-bar">
+    <span class="announce-left">Entrega grátis desde 19€!</span>
+    <span class="announce-center">
+      <a href="#" class="announce-link announce-link--red">Promoções</a>
+      <a href="#" class="announce-link">Entrega e pagamento</a>
+      <a href="#" class="announce-link">Sobre a loja</a>
+    </span>
+    <span class="announce-right">★ Stock Rewards</span>
+  </div>
 
-          <div class="form-group">
-            <label>Email *</label>
-            <input 
-              type="email" 
-              [(ngModel)]="registerEmail" 
-              name="registerEmail"
-              placeholder="seu@email.com"
-              required
-            />
-          </div>
+  <!-- ② Main header -->
+  <header class="lp-header">
+    <div class="lp-header__left">
+      <button class="lp-icon-btn" title="Pesquisar" aria-label="Pesquisar">
+        <svg width="24" height="24" fill="none" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
+    <div class="lp-header__logo">
+      <svg class="lp-logo-svg" viewBox="0 0 320 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lp-rg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c97b6e"/>
+            <stop offset="50%" stop-color="#e8a898"/>
+            <stop offset="100%" stop-color="#c97b6e"/>
+          </linearGradient>
+        </defs>
+        <text x="50%" y="52" text-anchor="middle"
+              font-family="'Dancing Script', 'Pacifico', 'Brush Script MT', cursive"
+              font-size="52" font-weight="700"
+              fill="url(#lp-rg)">Stock Manager</text>
+        <text x="50%" y="72" text-anchor="middle"
+              font-family="'Helvetica Neue', Arial, sans-serif"
+              font-size="11" font-weight="400" letter-spacing="6"
+              fill="#e8a898">SIGNATURE</text>
+        <path d="M48 82 Q160 96 272 82" stroke="url(#lp-rg)" stroke-width="1.2" fill="none"/>
+        <g fill="#e8a898" transform="translate(274,72)">
+          <polygon points="5,0 6.2,3.8 10,3.8 7,6.2 8.1,10 5,7.8 1.9,10 3,6.2 0,3.8 3.8,3.8" opacity="0.9"/>
+          <polygon points="14,4 14.8,6.4 17,6.4 15.3,7.8 15.9,10 14,8.7 12.1,10 12.7,7.8 11,6.4 13.2,6.4" transform="scale(0.6) translate(8,6)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="lp-header__right">
+      <!-- User silhouette — identical to reference image: thin circle head + shoulder arc -->
+      <button class="lp-icon-btn" title="Entrar" aria-label="Entrar" (click)="togglePanel()">
+        <svg width="24" height="24" fill="none" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </button>
+      <!-- Heart / wishlist — thin outline like reference -->
+      <button class="lp-icon-btn" title="Favoritos" aria-label="Favoritos">
+        <svg width="24" height="24" fill="none" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+      <!-- Shopping bag — thin outline like reference -->
+      <button class="lp-icon-btn" title="Carrinho" aria-label="Carrinho">
+        <svg width="24" height="24" fill="none" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </button>
+    </div>
+  </header>
 
-          <div class="form-group">
-            <label>Palavra-passe *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="registerPassword" 
-              name="registerPassword"
-              placeholder="••••••••"
-              required
-            />
-          </div>
+  <!-- ③ Category nav -->
+  <nav class="lp-nav">
+    <a href="#" class="lp-nav__link">Maquilhagem</a>
+    <a href="#" class="lp-nav__link">Cabelo</a>
+    <a href="#" class="lp-nav__link">Rosto</a>
+    <a href="#" class="lp-nav__link">Corpo</a>
+    <a href="#" class="lp-nav__link">Acess&#243;rios</a>
+    <a href="#" class="lp-nav__link">Sa&#250;de e Cuidado</a>
+    <a href="#" class="lp-nav__link">Presentes</a>
+    <a href="#" class="lp-nav__link">Roupa</a>
+    <a href="#" class="lp-nav__link">Marcas</a>
+  </nav>
 
-          <div class="form-group">
-            <label>Confirmar Palavra-passe *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="registerPassword2" 
-              name="registerPassword2"
-              placeholder="••••••••"
-              required
-            />
-          </div>
+  <!-- ④ Hero banner -->
+  <section class="lp-hero">
+    <div class="lp-hero__overlay">
+      <p class="lp-hero__tagline">Gerencie o seu invent&#225;rio</p>
+      <h1 class="lp-hero__title">Stock Manager</h1>
+      <p class="lp-hero__desc">Controle completo do seu stock —<br>organizado conforme as suas necessidades</p>
+      <button class="lp-hero__cta" (click)="togglePanel()">Entrar agora</button>
+    </div>
+  </section>
 
-          <button 
-            class="btn btn--primary btn--block" 
-            type="submit"
-            [disabled]="loading"
-          >
-            {{ loading ? 'A processar...' : 'Criar Conta' }}
-          </button>
-        </form>
+  <!-- ⑤ Login / Register slide panel -->
+  <div class="auth-panel" [class.auth-panel--open]="panelOpen">
+    <div class="auth-panel__backdrop" (click)="togglePanel()"></div>
+    <div class="auth-panel__drawer">
+      <button class="auth-panel__close" (click)="togglePanel()" aria-label="Fechar">&times;</button>
+      <div class="auth-tabs">
+        <button class="auth-tab" [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Entrar</button>
+        <button class="auth-tab" [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">Criar Conta</button>
       </div>
-
-      <!-- Divider -->
-      <div class="auth-divider"></div>
-
-      <!-- Login Section -->
-      <div class="auth-section">
-        <div class="auth-header">
-          <h2>Fazer Login</h2>
+      <form *ngIf="activeTab === 'login'" class="auth-form" (ngSubmit)="login()">
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="loginEmail" name="loginEmail" placeholder="seu@email.com" required />
         </div>
-
-        <form class="auth-form" (ngSubmit)="login()">
-          <div class="form-group">
-            <label>Email *</label>
-            <input 
-              type="email" 
-              [(ngModel)]="loginEmail" 
-              name="loginEmail"
-              placeholder="seu@email.com"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Palavra-passe *</label>
-            <input 
-              type="password" 
-              [(ngModel)]="loginPassword" 
-              name="loginPassword"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <button 
-            class="btn btn--primary btn--block" 
-            type="submit"
-            [disabled]="loading"
-          >
-            {{ loading ? 'A processar...' : 'Entrar' }}
-          </button>
-        </form>
-      </div>
+        <div class="form-group">
+          <label>Palavra-passe *</label>
+          <input type="password" [(ngModel)]="loginPassword" name="loginPassword" placeholder="••••••••" required />
+        </div>
+        <button class="auth-submit" type="submit" [disabled]="loading">
+          {{ loading ? 'A processar...' : 'Entrar' }}
+        </button>
+      </form>
+      <form *ngIf="activeTab === 'register'" class="auth-form" (ngSubmit)="register()">
+        <div class="form-group">
+          <label>Nome Completo *</label>
+          <input type="text" [(ngModel)]="registerName" name="registerName" placeholder="Seu nome" required />
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="registerEmail" name="registerEmail" placeholder="seu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Palavra-passe *</label>
+          <input type="password" [(ngModel)]="registerPassword" name="registerPassword" placeholder="••••••••" required />
+        </div>
+        <div class="form-group">
+          <label>Confirmar Palavra-passe *</label>
+          <input type="password" [(ngModel)]="registerPassword2" name="registerPassword2" placeholder="••••••••" required />
+        </div>
+        <button class="auth-submit" type="submit" [disabled]="loading">
+          {{ loading ? 'A processar...' : 'Criar Conta' }}
+        </button>
+      </form>
     </div>
   </div>
+
 </div>

@@ -45,7 +45,7 @@ body .side-menu .menu-btn {
   min-width: 0 !important;
   border: none !important;
   background: transparent !important;
-  color: #8a8a8a !important; /* default inactive grey */
+  color: #111 !important;
   font-weight: 600 !important;
   gap: 10px !important;
   border-radius: calc(12px * var(--global-radius-factor)) !important;
@@ -66,7 +66,7 @@ body .side-menu .menu-btn svg {
 body .side-menu .menu-btn span {
   flex: 1 1 auto !important;
   text-align: left !important;
-  color: #8a8a8a !important;
+  color: #111 !important;
 }
 
 /* Active button: black text, beige pill, no border */
@@ -401,20 +401,24 @@ menu-btn.active {
   color: #111111 !important; /* black text when active */
   border: none !important;
 }
-/* Force white text/icons in the side menu (higher specificity to override other rules) */
+/* Force black text/icons in the side menu */
 .side-menu .menu-btn,
 .side-menu .menu-btn span {
-  color: #ffffff !important;
+  color: #111 !important;
 }
 .side-menu .menu-btn svg {
-  fill: #ffffff !important;
+  fill: #111 !important;
 }
 
-/* Ensure all buttons across the app use white text/icons for contrast */
-button, .btn, .menu-btn {
+/* Ensure all buttons across the app (except landing page) use white text/icons for contrast */
+body:not(:has(app-auth-page)) button,
+body:not(:has(app-auth-page)) .btn,
+body:not(:has(app-auth-page)) .menu-btn {
   color: #ffffff !important;
 }
-button svg, .btn svg, .menu-btn svg {
+body:not(:has(app-auth-page)) button svg,
+body:not(:has(app-auth-page)) .btn svg,
+body:not(:has(app-auth-page)) .menu-btn svg {
   fill: #ffffff !important;
 }
 td, th, .full-width-table td, .full-width-table th {
@@ -1716,4 +1720,8 @@ body input,
 body select,
 body textarea {
   border-radius: 4.4px !important;
+}
+/* Pre-login landing page: body background */
+body:has(app-auth-page) {
+  background: #fff !important;
 }
