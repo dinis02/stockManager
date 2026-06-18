@@ -18,8 +18,9 @@ ENV DATA_DIR=/data
 
 WORKDIR /app
 
-COPY server/package*.json ./server/
-RUN npm ci --omit=dev --prefix ./server
+	COPY server/package*.json ./server/
+	# Try a clean install with the lockfile; if npm ci fails, fall back to npm install
+	RUN npm ci --omit=dev --prefix ./server || npm install --omit=dev --prefix ./server
 
 COPY server ./server
 COPY --from=frontend-build /app/dist ./dist
