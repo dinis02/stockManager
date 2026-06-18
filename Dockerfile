@@ -19,11 +19,11 @@ ENV DATA_DIR=/data
 WORKDIR /app
 
 COPY server/package*.json ./server/
+COPY server ./server
 WORKDIR /app/server
 RUN npm install --omit=dev
 
 WORKDIR /app
-COPY server ./server
 COPY --from=frontend-build /app/dist ./dist
 
 EXPOSE 3000
