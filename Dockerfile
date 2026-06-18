@@ -10,7 +10,7 @@ COPY angular.json tsconfig*.json ./
 COPY src ./src
 RUN npm run build
 
-FROM node:24-bookworm AS runtime
+FROM node:18-bullseye AS runtime
 
 ENV NODE_ENV=production
 ENV PORT=3000
@@ -20,8 +20,7 @@ WORKDIR /app
 
 COPY server/package*.json ./server/
 WORKDIR /app/server
-# Try a clean install with the lockfile; if npm ci fails, fall back to npm install
-RUN npm ci --omit=dev || npm install --omit=dev
+RUN npm install --omit=dev
 
 WORKDIR /app
 COPY server ./server
