@@ -3,7 +3,8 @@ FROM node:24-bookworm AS frontend-build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+# Use `npm ci` when a lockfile exists, otherwise fall back to `npm install`
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
 COPY angular.json tsconfig*.json ./
 COPY src ./src
