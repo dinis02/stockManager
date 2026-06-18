@@ -6,6 +6,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../services/categories.service';
 import { BrandService } from '../../services/brand.service';
+import { API_BASE } from '../../api-base';
 
 @Component({
   selector: 'app-inventory-list',
@@ -15,7 +16,7 @@ import { BrandService } from '../../services/brand.service';
   styleUrls: ['./inventory-list.component.scss']
 })
 export class InventoryListComponent implements OnInit, OnDestroy {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = API_BASE;
   items: any[] = [];
   filteredItems: any[] = [];
   loading = false;

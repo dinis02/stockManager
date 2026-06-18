@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Category, CategoryService } from '../../services/categories.service';
 import { Brand, BrandService } from '../../services/brand.service';
+import { API_BASE } from '../../api-base';
 
 @Component({
   selector: 'app-inventory-form',
@@ -15,7 +16,7 @@ import { Brand, BrandService } from '../../services/brand.service';
   styleUrls: ['./inventory-form.component.scss']
 })
 export class InventoryFormComponent {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = API_BASE;
   categories: Category[] = [];
   brands: Brand[] = [];
 

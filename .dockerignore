@@ -1,0 +1,11 @@
+node_modules
+server/node_modules
+dist
+.angular
+.git
+npm-debug.log
+server/data.db
+server/*.db
+server/*.db-*
+.env
+.env.*

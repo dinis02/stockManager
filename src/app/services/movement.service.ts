@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE } from '../api-base';
 
 export interface Movement {
   id: number;
@@ -33,7 +34,7 @@ export interface HistoryEvent {
   providedIn: 'root'
 })
 export class MovementService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = API_BASE;
 
   constructor(private http: HttpClient) {}
 

@@ -11,7 +11,11 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const DB_PATH = path.join(__dirname, 'data.db');
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+const DB_PATH = process.env.DB_PATH || path.join(DATA_DIR, 'data.db');
 const db = new Database(DB_PATH);
 
 // Initialize schema
@@ -598,8 +602,16 @@ app.get('/api/products', (req, res) => {
   }
 });
 
-// Serve nothing else; server is only API for dev
+const staticDir = path.join(__dirname, '..', 'dist', 'stockManager');
+if (fs.existsSync(staticDir)) {
+  app.use(express.static(staticDir));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(staticDir, 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
-  console.log(`StockManager dev API listening on http://localhost:${PORT}`);
+  console.log(`StockManager listening on http://localhost:${PORT}`);
+  console.log(`SQLite database: ${DB_PATH}`);
 });
 

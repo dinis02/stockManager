@@ -14,6 +14,7 @@ import { ItemsService } from './services/items.service';
 import { NotificationService } from './services/notification.service';
 import { AuthService } from './services/auth.service';
 import { MovementService, Movement } from './services/movement.service';
+import { API_BASE } from './api-base';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +36,7 @@ import { MovementService, Movement } from './services/movement.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = API_BASE;
   @ViewChild(CategoriesModalComponent) categoriesModal!: CategoriesModalComponent;
   @ViewChild(BrandsModalComponent) brandsModal!: BrandsModalComponent;
   @ViewChild(MovementModalComponent) movementModal!: MovementModalComponent;

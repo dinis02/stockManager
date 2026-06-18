@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { API_BASE } from '../api-base';
 
 export interface Brand {
   id?: number;
@@ -12,7 +13,7 @@ export interface Brand {
   providedIn: 'root'
 })
 export class BrandService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = API_BASE;
   private _brands$ = new BehaviorSubject<Brand[]>([]);
   public brands$ = this._brands$.asObservable();
 

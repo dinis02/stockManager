@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { API_BASE } from '../api-base';
 
 export interface Category {
   id: number;
@@ -12,7 +13,7 @@ export interface Category {
   providedIn: 'root'
 })
 export class CategoryService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = API_BASE;
   private categoriesSubject = new BehaviorSubject<Category[]>([]);
   public categories$ = this.categoriesSubject.asObservable();
 
