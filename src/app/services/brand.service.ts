@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface Brand {
   id?: number;
@@ -11,6 +12,7 @@ export interface Brand {
   providedIn: 'root'
 })
 export class BrandService {
+  private API_URL = 'http://localhost:3000/api';
   private _brands$ = new BehaviorSubject<Brand[]>([]);
   public brands$ = this._brands$.asObservable();
 
@@ -19,17 +21,27 @@ export class BrandService {
   }
 
   loadBrands() {
-    this.http.get<Brand[]>('/api/brands').subscribe(
+    this.http.get<Brand[]>(`${this.API_URL}/brands`).subscribe(
       data => this._brands$.next(data || []),
       () => this._brands$.next([])
     );
   }
 
-  addBrand(name: string) {
-    return this.http.post<Brand>('/api/brands', { name });
+  addBrand(name: string): Observable<Brand> {
+    return this.http.post<Brand>(`${this.API_URL}/brands`, { name }).pipe(
+      tap(() => this.loadBrands())
+    );
   }
 
-  deleteBrand(id: number) {
-    return this.http.delete(`/api/brands/${id}`);
+  updateBrand(id: number, name: string): Observable<Brand> {
+    return this.http.put<Brand>(`${this.API_URL}/brands/${id}`, { name }).pipe(
+      tap(() => this.loadBrands())
+    );
+  }
+
+  deleteBrand(id: number): Observable<{ ok: boolean }> {
+    return this.http.delete<{ ok: boolean }>(`${this.API_URL}/brands/${id}`).pipe(
+      tap(() => this.loadBrands())
+    );
   }
 }

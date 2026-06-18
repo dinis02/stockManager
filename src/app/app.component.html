@@ -1,111 +1,218 @@
 <div class="fixed-bg"></div>
 
-<!-- Auth Page (shown when not logged in) -->
 <div *ngIf="!(currentUser$ | async)">
-	<app-auth-page></app-auth-page>
+  <app-auth-page></app-auth-page>
 </div>
 
-<!-- Main App (shown when logged in) -->
-<div *ngIf="currentUser$ | async" class="main-app">
-	<aside class="side-menu">
-	<div class="logo-area">
-		<svg class="sidebar-logo-svg" viewBox="0 0 320 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<defs>
-				<linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="100%">
-					<stop offset="0%"   stop-color="#c97b6e"/>
-					<stop offset="50%"  stop-color="#e8a898"/>
-					<stop offset="100%" stop-color="#c97b6e"/>
-				</linearGradient>
-			</defs>
-			<text x="50%" y="52" text-anchor="middle"
-				font-family="'Dancing Script', 'Brush Script MT', cursive"
-				font-size="52" font-weight="700"
-				fill="url(#rg2)">Stock Manager</text>
-			<text x="50%" y="72" text-anchor="middle"
-				font-family="'Helvetica Neue', Arial, sans-serif"
-				font-size="11" font-weight="400" letter-spacing="6"
-				fill="#e8a898">SIGNATURE</text>
-			<path d="M48 82 Q160 96 272 82" stroke="url(#rg2)" stroke-width="1.2" fill="none"/>
-			<g fill="#e8a898" transform="translate(274,72)">
-				<polygon points="5,0 6.2,3.8 10,3.8 7,6.2 8.1,10 5,7.8 1.9,10 3,6.2 0,3.8 3.8,3.8" opacity="0.9"/>
-			</g>
-		</svg>
-	</div>
+<div *ngIf="currentUser$ | async as user" class="admin-root">
+  <button class="mobile-sidebar-toggle" type="button" (click)="toggleMobileSidebar()" aria-label="Abrir menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    Menu
+  </button>
+  <button class="sidebar-backdrop" type="button" [class.open]="mobileSidebarOpen" (click)="closeMobileSidebar()" aria-label="Fechar menu"></button>
 
-	<nav>
-		<button class="menu-btn" [class.active]="view==='add'" (click)="select('add')">
-			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2v6h6a2 2 0 0 1 0 4h-6v6a2 2 0 0 1-4 0v-6H4a2 2 0 0 1 0-4h6V4a2 2 0 0 1 2-2z"/></svg>
-			<span>Adicionar</span>
-		</button>
-		<button class="menu-btn" [class.active]="view==='table'" (click)="select('table')">
-			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-			<span>Tabela</span>
-		</button>
-		<button class="menu-btn" [class.active]="view==='history'" (click)="select('history')">
-			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm3.5-9a1.5 1.5 0 0 0-1.5-1.5h-2V5.5a1.5 1.5 0 0 0-3 0v5a1.5 1.5 0 0 0 1.5 1.5h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
-			<span>Histórico</span>
-		</button>
-		<button class="menu-btn" (click)="showCategoriesModal()">
-			<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l1.72-1.34c.15-.12.19-.34.1-.51l-1.63-2.83a.363.363 0 0 0-.52-.1l-2.03 1.59c-.42-.32-.9-.6-1.44-.78L14.4 2.81c-.04-.21-.24-.36-.46-.36h-3.28c-.22 0-.42.15-.46.36L9.9 5.5C9.36 5.68 8.88 5.96 8.46 6.28L6.43 4.69a.361.361 0 0 0-.52.1l-1.63 2.83c-.09.17-.05.39.1.51l1.72 1.34c-.05.3-.07.62-.07.94 0 .32.02.64.07.94L2.38 14.28c-.15.12-.19.34-.1.51l1.63 2.83c.09.17.31.25.52.1l2.03-1.59c.42.32.9.6 1.44.78l.3 2.69c.05.21.24.36.46.36h3.28c.22 0 .42-.15.46-.36l.3-2.69c.54-.18 1.02-.46 1.44-.78l2.03 1.59c.21.16.43.08.52-.1l1.63-2.83c.09-.17.05-.39-.1-.51l-1.72-1.34M12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-			<span>Categorias</span>
-		</button>
-	</nav>
+  <aside class="sidebar" [class.open]="mobileSidebarOpen">
+    <div class="sidebar-brand">
+      <div class="admin-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.8 1.2 6.9-6.2-3.2L5.8 21 7 14.1 2 9.3l6.9-1L12 2Z"/></svg>
+        Painel Admin
+      </div>
+    </div>
 
-	<div class="menu-footer">
-		<div class="user-info" *ngIf="currentUser$ | async as user">
-				<!-- Logout icon button -->
-				<button class="icon-btn logout-btn" title="Sair" aria-label="Sair" (click)="logout()">
-					<!-- Replaced logout SVG with a standard 'exit door' icon for clarity -->
-					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-						<path d="M10.09 15.59L12.5 13H3v-2h9.5l-2.41-2.59L11.5 7l5 5-5 5-1.41-1.41z" />
-						<path d="M19 3H5c-1.1 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" opacity="0"/>
-					</svg>
-				</button>
-				<!-- User/profile icon button -->
-				<button class="icon-btn user-icon-btn" title="Perfil" aria-label="Perfil" (click)="select('profile')">
-					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-					<span class="sr-only">{{ user }}</span>
-				</button>
-		</div>
-	</div>
-</aside>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <button class="nav-item" [class.active]="view==='dashboard'" (click)="select('dashboard')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" [class.active]="view==='add'" (click)="select('add')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Adicionar
+      </button>
+      <button class="nav-item" [class.active]="view==='table'" (click)="select('table')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><path d="M7 7h.01"/></svg>
+        Produtos
+        <span class="nav-badge">{{ totalProducts }}</span>
+      </button>
+      <button class="nav-item" [class.active]="view==='history'" (click)="select('history')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v6h6"/><path d="M12 7v5l3 2"/></svg>
+        Historico
+      </button>
 
-<main class="main-content-with-menu">
-	<h2 class="main-title" [hidden]="view !== 'add'">Adicionar Produto</h2>
-	<div class="glass-card wide-list-card" [hidden]="view !== 'add'">
-		<section class="inventory-section">
-			<div class="form-card">
-				<app-inventory-form [editItem]="currentEdit"></app-inventory-form>
-			</div>
-		</section>
-	</div>
+      <div class="nav-section-label">Gestao</div>
+      <button class="nav-item" type="button" (click)="showCategoriesModal()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/></svg>
+        Categorias
+      </button>
+      <button class="nav-item" type="button" (click)="showBrandsModal()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><path d="M7 7h.01"/></svg>
+        Marcas
+      </button>
+      <button class="nav-item" [class.active]="view==='profile'" (click)="select('profile')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </button>
+    </nav>
 
-	<h2 class="main-title" [hidden]="view !== 'table'">Produtos</h2>
-	<div class="glass-card wide-list-card" [hidden]="view !== 'table'">
-		<section class="list-section">
-			<div class="table-card">
-				<app-inventory-list (openMovementModal)="openMovement($event)"></app-inventory-list>
-			</div>
-		</section>
-	</div>
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-avatar">{{ currentUserInitial }}</div>
+        <div class="admin-meta">
+          <div class="admin-name">{{ user }}</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" title="Sair" aria-label="Sair" (click)="logout()">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
 
-	<h2 class="main-title" [hidden]="view !== 'history'">Histórico</h2>
-	<div class="glass-card wide-list-card" [hidden]="view !== 'history'">
-		<app-history-view></app-history-view>
-	</div>
+  <main class="main">
+    <header class="topbar">
+      <span class="topbar-title">{{ activeTitle }}</span>
+      <div class="topbar-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" [(ngModel)]="globalSearch" placeholder="Pesquisar no painel..." />
+      </div>
+      <button class="topbar-action" type="button" (click)="loadDashboard()" title="Actualizar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.2 6.5M3 12A9 9 0 0 1 18.2 5.5"/><path d="M21 4v6h-6M3 20v-6h6"/></svg>
+      </button>
+      <button class="topbar-action" type="button" (click)="select('add')" title="Novo produto">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </header>
 
-	<h2 class="main-title" [hidden]="view !== 'profile'">Meu Perfil</h2>
-	<div class="glass-card wide-list-card" [hidden]="view !== 'profile'">
-		<app-profile-page></app-profile-page>
-	</div>
-</main>
+    <section class="content">
+      <div class="view" [class.active]="view==='dashboard'">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">Resumo real</div>
+            <h1>Visao geral <em>do stock</em></h1>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-ghost" type="button" (click)="loadDashboard()">Actualizar</button>
+            <button class="btn btn-primary" type="button" (click)="select('table')">Ver produtos</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-label">Produtos registados</div>
+            <div class="kpi-value rose">{{ totalProducts }}</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">Unidades em stock</div>
+            <div class="kpi-value">{{ totalUnits }}</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">Valor estimado</div>
+            <div class="kpi-value green">{{ formatCurrency(inventoryValue) }} EUR</div>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-label">Stock baixo</div>
+            <div class="kpi-value red">{{ lowStockCount }}</div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="chart-card">
+            <div class="chart-card-title">Produtos recentes</div>
+            <div class="mini-table">
+              <div class="mini-table-head">
+                <span>Produto</span><span>Categoria</span><span>Qtd.</span><span>Valor</span>
+              </div>
+              <div class="mini-table-row" *ngFor="let item of recentItems">
+                <span>{{ item.name || '-' }}</span>
+                <span>{{ item.category || '-' }}</span>
+                <span>{{ item.quantity || 0 }} {{ item.unit || 'un' }}</span>
+                <span class="amount">{{ formatCurrency((item.quantity || 0) * (item.price || 0)) }} EUR</span>
+              </div>
+              <div class="empty-state" *ngIf="!recentItems.length">Ainda nao existem produtos registados.</div>
+            </div>
+          </article>
+
+          <article class="chart-card">
+            <div class="chart-card-title">Actividade recente</div>
+            <div class="activity-list">
+              <div class="activity-item" *ngFor="let movement of recentMovements">
+                <div class="activity-icon" [class.exit]="movement.type === 'exit'">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </div>
+                <div class="activity-text">
+                  <div class="activity-main">
+                    {{ movement.type === 'entry' ? 'Entrada' : 'Saida' }} de {{ movement.quantity }} em {{ movement.name }}
+                  </div>
+                  <div class="activity-time">{{ formatMovementDate(movement.timestamp) }}</div>
+                </div>
+              </div>
+              <div class="empty-state" *ngIf="!recentMovements.length">Sem movimentos recentes.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="view" [class.active]="view==='add'">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">Catalogo</div>
+            <h1>{{ currentEdit ? 'Editar' : 'Novo' }} <em>produto</em></h1>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-ghost" type="button" (click)="select('table')">Ver tabela</button>
+          </div>
+        </div>
+        <div class="panel-card">
+          <app-inventory-form [editItem]="currentEdit"></app-inventory-form>
+        </div>
+      </div>
+
+      <div class="view" [class.active]="view==='table'">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">Inventario</div>
+            <h1>Produtos</h1>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" type="button" (click)="select('add')">Novo produto</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <app-inventory-list (openMovementModal)="openMovement($event)"></app-inventory-list>
+        </div>
+      </div>
+
+      <div class="view" [class.active]="view==='history'">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">Movimentos</div>
+            <h1>Historico</h1>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <app-history-view></app-history-view>
+        </div>
+      </div>
+
+      <div class="view" [class.active]="view==='profile'">
+        <div class="page-header">
+          <div>
+            <div class="page-eyebrow">Conta</div>
+            <h1>Meu <em>perfil</em></h1>
+          </div>
+        </div>
+        <div class="panel-card">
+          <app-profile-page></app-profile-page>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
-<!-- Modals -->
 <app-categories-modal #categoriesModal></app-categories-modal>
-<app-movement-modal #movementModal [item]="selectedItemForMovement"></app-movement-modal>
+<app-brands-modal #brandsModal></app-brands-modal>
+<app-movement-modal #movementModal [item]="selectedItemForMovement" (movementAdded)="onMovementAdded()"></app-movement-modal>
 
-<!-- Global toast host so notifications show even if a form unmounts -->
 <div class="app-toast-host" *ngIf="notifications$ | async as notes">
-	<div class="app-toast" *ngFor="let n of notes" [attr.data-type]="n.type">{{ n.message }}</div>
+  <div class="app-toast" *ngFor="let n of notes" [attr.data-type]="n.type">{{ n.message }}</div>
 </div>

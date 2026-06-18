@@ -4,22 +4,30 @@
       <input name="name" [(ngModel)]="item.name" required placeholder="Nome do produto" />
     </label>
     <label>Marca
-      <input name="brand" [(ngModel)]="item.brand" placeholder="Marca" />
+      <select name="brand" [(ngModel)]="item.brand">
+        <option value="">Sem marca</option>
+        <option *ngFor="let brand of brands" [value]="brand.name">{{ brand.name }}</option>
+      </select>
     </label>
   </div>
 
   <div class="form-row">
     <label>Categoria
-      <select name="category" [(ngModel)]="item.category"><option>Outros</option><option>Shampoo</option><option>Tratamento</option></select>
+      <select name="category" [(ngModel)]="item.category">
+        <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+      </select>
     </label>
     <label>Quantidade *
       <input name="quantity" type="number" min="0" [(ngModel)]="item.quantity" required />
     </label>
-    <label>Quantidade mínima
+    <label>Quantidade minima
       <input name="min_quantity" type="number" min="0" [(ngModel)]="item.min_quantity" placeholder="0" />
     </label>
     <label>Unidade
-      <select name="unit" [(ngModel)]="item.unit"><option>un</option><option>ml</option></select>
+      <select name="unit" [(ngModel)]="item.unit">
+        <option>un</option>
+        <option>ml</option>
+      </select>
     </label>
   </div>
 
@@ -30,19 +38,18 @@
     <label>Fornecedor
       <input name="supplier" [(ngModel)]="item.supplier" />
     </label>
-    <label>Preço unitário (€)
+    <label>Preco unitario (EUR)
       <input name="price" type="number" step="0.01" [(ngModel)]="item.price" />
     </label>
   </div>
 
-  <label style="width:100%">Observações
+  <label>Observacoes
     <textarea name="notes" rows="2" [(ngModel)]="item.notes"></textarea>
   </label>
 
-    <div style="display:flex; justify-content:flex-end; gap:8px;">
-      <button class="btn btn--primary btn--pill" type="submit" [disabled]="saving">
-        <span>Adicionar</span>
-      </button>
-    </div>
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit" [disabled]="saving">
+      <span>{{ item.id ? 'Guardar produto' : 'Adicionar produto' }}</span>
+    </button>
+  </div>
 </form>
-

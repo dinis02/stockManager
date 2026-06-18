@@ -1,366 +1,153 @@
-.list-content { 
-  margin-top: 0;
-
-  .filters-section {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    margin-bottom: 0;
-    padding: 26px 30px;
-    background: transparent;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .search-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    padding: 0;
-    flex: 1;
-    min-width: 300px;
-
-    svg {
-      width: 20px;
-      height: 20px;
-      opacity: 1;
-      flex-shrink: 0;
-      fill: #ffffff !important;
-      stroke: #ffffff !important;
-    }
-
-    .search-input {
-      flex: 1;
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 1rem;
-      color: #ffffff !important;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.6) !important;
-        opacity: 1;
-      }
-    }
-  }
-
-  .filter-controls {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-
-      label {
-        font-weight: 600;
-        font-size: 0.95rem;
-        white-space: nowrap;
-        color: #ffffff !important;
-        line-height: 40px;
-        margin: 0;
-        display: flex;
-        align-items: center;
-      }
-
-      select {
-        padding: 0.5rem 0.75rem;
-        border: 1px solid var(--input-border);
-        border-radius: 6px;
-        background: var(--bg);
-        color: #ffffff !important;
-        line-height: 1;
-        height: 40px;
-        font-size: 0.95rem;
-        cursor: pointer;
-      }
-    }
-  }
+.list-content {
+  min-width: 980px;
 }
 
-.full-width-table th, .full-width-table td { padding: 0.6rem 0.8rem; }
-.full-width-table tbody tr td { vertical-align: middle; }
-
-/* Table card: inner white rounded panel */
-.table-card {
-	/* match form-card: use panel variable so background shows through consistently */
-	background: var(--panel-bg) !important;
-	border-radius: 14px;
-	padding: 26px 30px; /* match form */
-	border: 1px solid var(--input-border);
-	box-shadow: 0 10px 24px rgba(24,18,12,0.06); /* match form shadow */
-	margin: 1.25rem 0; /* outer gutter so card doesn't touch page edges */
-}
-.table-card .list-content { margin-top: 0; }
-
-/* make the table card stick to the top of the viewport when scrolling */
-.table-card {
-	position: sticky;
-	top: 92px;
-	z-index: 30;
-	max-height: calc(100vh - 112px);
-	overflow: auto;
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--admin-border-soft);
+  flex-wrap: wrap;
 }
 
-.full-width-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; table-layout: fixed; }
-.full-width-table tbody tr { background: rgba(255,255,255,0.02); border-radius: 8px; transition: background 0.15s, transform 0.12s; }
-.full-width-table tbody tr:hover { background: rgba(255,255,255,0.05); transform: translateY(-2px); }
-.full-width-table tbody tr td { padding: 12px; }
-
-/* Low stock styling */
-.full-width-table tbody tr.low-stock {
-  background: rgba(220, 53, 69, 0.08);
-  border-left: 3px solid #dc3545;
+.table-title {
+  flex: 0 0 auto;
+  color: var(--admin-muted);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
 }
 
-.full-width-table tbody tr.low-stock:hover {
-  background: rgba(220, 53, 69, 0.12);
+.table-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 260px;
+  padding: 6px 11px;
+  border-radius: 4px;
+  background: var(--admin-surface-soft);
+  border: 1px solid var(--admin-border-soft);
+  color: var(--admin-muted);
+}
+
+.table-search svg {
+  width: 12px;
+  height: 12px;
+}
+
+.table-search input {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+}
+
+.filter-select {
+  width: auto;
+  min-width: 140px;
+  padding: 6px 28px 6px 11px;
+  font-size: 11px;
+  color: var(--admin-text-soft);
+}
+
+.full-width-table {
+  min-width: 980px;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable:hover {
+  color: var(--admin-text-soft);
+}
+
+tbody tr {
+  transition: background 140ms ease;
+}
+
+tbody tr:hover {
+  background: rgba(127, 93, 64, 0.04);
+}
+
+tbody tr.low-stock {
+  background: rgba(160, 48, 48, 0.04);
+}
+
+.cell-text {
+  display: inline-block;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.product-name {
+  color: var(--admin-text);
 }
 
 .quantity-cell {
-  font-weight: 600;
-
-  &.alert {
-    color: #dc3545;
-  }
-
-  .alert-badge {
-    margin-left: 0.5rem;
-    display: inline-block;
-    font-size: 1.1rem;
-  }
+  white-space: nowrap;
 }
 
-/* Sortable header styling */
-.full-width-table thead th.sortable {
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  .sort-indicator {
-    margin-left: 0.25rem;
-    opacity: 0.7;
-  }
+.quantity-cell.alert {
+  color: var(--admin-danger);
 }
 
-/* Force single-line cells, equal column widths and ellipsis with tooltip */
-.full-width-table th,
-.full-width-table td {
-	width: calc(100% / 10);
-	white-space: nowrap;
-	/* do not set overflow here — we want the td::after tooltip to be visible */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
-.full-width-table td .cell-text {
-	display: inline-block;
-	width: 100%;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	cursor: help; /* hint that hover shows more */
+.badge.neutral {
+  background: rgba(127, 93, 64, 0.08);
+  color: var(--admin-muted);
 }
 
-/* Actions cell */
+.badge.danger {
+  margin-left: 6px;
+  background: rgba(160, 48, 48, 0.12);
+  color: var(--admin-danger);
+}
+
 .actions-cell {
-  display: flex !important;
-  gap: 0.5rem !important;
-  justify-content: center !important;
-  align-items: center !important;
-  flex-wrap: nowrap !important;
-  width: auto !important;
-  min-width: 130px !important;
-  white-space: nowrap !important;
-  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+  min-width: 116px;
 }
 
-/* custom tooltip that replaces native title: uses panel background and white larger text */
-.full-width-table td { position: relative; }
-/* tooltip rendered by the td so it won't be clipped by the span */
-.full-width-table td[data-tooltip]:not([data-tooltip=""])::after {
-	content: attr(data-tooltip);
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%) translateY(12px);
-	white-space: normal; /* allow wrapping in tooltip */
-	max-width: 360px;
-	background: var(--panel-bg);
-	color: #ffffff;
-	font-size: 1.04rem; /* larger text */
-	padding: 8px 10px;
-	border-radius: 8px;
-	box-shadow: 0 6px 24px rgba(0,0,0,0.25);
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	z-index: 1200;
-	transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
-	text-align: left;
-	right: auto;
+td input,
+td select {
+  min-width: 100px;
+  padding: 6px 8px;
+  font-size: 11px;
 }
 
-.full-width-table td[data-tooltip]:not([data-tooltip=""]):hover::after {
-	opacity: 1;
-	visibility: visible;
-	transform: translateX(-50%) translateY(20px);
-}
-.full-width-table td:hover::after {
-	opacity: 1;
-	visibility: visible;
-	transform: translateX(-50%) translateY(14px);
+.empty-row {
+  padding: 28px;
+  text-align: center;
+  color: var(--admin-muted);
 }
 
-/* Inputs used in row-edit should visually match the panel and have slightly larger text */
-.full-width-table td input,
-.full-width-table td select,
-.full-width-table td textarea {
-	background: var(--panel-bg) !important;
-	border: 1px solid var(--input-border);
-	color: var(--text);
-	font-size: 1.02rem;
-	padding: 6px 8px;
-	border-radius: 8px;
-	box-sizing: border-box;
-}
-
-.full-width-table td .btn { font-size: 0.95rem; }
-.full-width-table thead tr th { padding: 0.8rem 1rem; opacity: 0.95; color: #3a2e1a; font-weight:700; }
-
-/* Ensure table header doesn't apply a different background */
-.table-card .full-width-table thead {
-	background: transparent !important;
-}
-
-/* Delete button style */
-.full-width-table tbody tr td .delete-btn {
-	display: inline-block;
-	background: transparent;
-	border: 1px solid rgba(0,0,0,0.08);
-	color: var(--accent-strong);
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-weight:600;
-	background: rgba(255,255,255,0.12);
-}
-.full-width-table tbody tr td .delete-btn:hover{ background: rgba(255,255,255,0.18); transform: translateY(-1px); }
-
-/* Ensure inputs used in list (filters/search) match global modern style */
-.table-card input,
-.table-card select,
-.table-card textarea {
-	/* use global minimal styles */
-}
-
-.full-width-table tbody tr { border-radius: 12px; }
-
-/* Responsive design */
-@media (max-width: 1200px) {
-  .filter-controls {
-    .filter-group {
-      flex: 1;
-      min-width: 200px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .list-content {
-    .filters-section {
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-    }
-
-    .search-bar {
-      padding: 0.4rem 0.5rem;
-
-      svg {
-        width: 18px;
-        height: 18px;
-      }
-
-      .search-input {
-        font-size: 0.95rem;
-      }
-    }
-
-    .filter-controls {
-      flex-direction: column;
-      gap: 0.75rem;
-
-      .filter-group {
-        width: 100%;
-        flex: none;
-      }
-    }
+@media (max-width: 720px) {
+  .table-toolbar {
+    align-items: stretch;
   }
 
-  .full-width-table {
-    font-size: 0.85rem;
-
-    thead {
-      display: none;
-    }
-
-    tbody tr {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    td {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100% !important;
-      padding: 0.5rem 0 !important;
-      border-bottom: 1px solid var(--input-border);
-
-      &:before {
-        content: attr(data-label);
-        font-weight: 600;
-        min-width: 100px;
-      }
-
-      &:last-child {
-        border-bottom: none;
-        justify-content: flex-end;
-        gap: 0.5rem;
-      }
-    }
-
-    .actions-cell {
-      width: 100% !important;
-      border-bottom: none !important;
-    }
-
-    .notes-cell {
-      white-space: normal;
-    }
-
-    .quantity-cell {
-      &.alert {
-        background: rgba(220, 53, 69, 0.1);
-        padding: 0.5rem;
-        border-radius: 4px;
-      }
-    }
+  .table-search,
+  .filter-select {
+    width: 100%;
   }
 }

@@ -1,1727 +1,202 @@
-input, select, textarea, button {
-  /* allow transparency by default; specific components will set readable backgrounds */
-  background: transparent !important;
-  color: #222 !important;
-  border: 1px solid #ffffff !important;
-  box-shadow: none !important;
-  opacity: 1 !important;
-}
-
-/* Desktop (default) overrides: force sidebar to match provided image */
-body .side-menu {
-  background: #e6e6e8 !important;
-  border-right: 1px solid #f0f0f0 !important;
-  box-shadow: 0 6px 18px rgba(20,20,20,0.04) !important;
-  align-items: flex-start !important;
-  /* move menu a bit higher and tighten spacing */
-  padding: 0.9rem 0.9rem 0.6rem 0.9rem !important; /* less top padding */
-  width: 180px !important;
-}
-
-body .side-menu .logo-area {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-left: 8px;
-  padding-bottom: 4px; /* tighten logo spacing */
-}
-
-body .side-menu nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 6px; /* smaller vertical gap between buttons */
-  width: 100%;
-  margin-top: 4px; /* raise buttons slightly */
-}
-
-/* menu buttons full-width, left-aligned labels */
-body .side-menu .menu-btn {
-  width: 100% !important;
-  justify-content: flex-start !important;
-  padding: 0.56rem 0.9rem !important; /* reduce vertical padding to compact buttons */
-  min-width: 0 !important;
-  border: none !important;
-  background: transparent !important;
-  color: #111 !important;
-  font-weight: 600 !important;
-  gap: 10px !important;
-  border-radius: calc(12px * var(--global-radius-factor)) !important;
-  text-align: left !important;
-  display: inline-flex !important;
-  align-items: center !important;
-}
-
-body .side-menu .menu-btn svg {
-  width: 18px !important;
-  height: 18px !important;
-  margin-left: 6px !important;
-  margin-right: 6px !important;
-  fill: #9b9b9b !important;
-  opacity: 0.95 !important;
-}
-
-body .side-menu .menu-btn span {
-  flex: 1 1 auto !important;
-  text-align: left !important;
-  color: #111 !important;
-}
-
-/* Active button: black text, beige pill, no border */
-body .side-menu .menu-btn.active {
-  background: linear-gradient(90deg, rgba(242,233,221,1), rgba(239,231,218,1)) !important;
-  box-shadow: 0 8px 22px rgba(46,33,19,0.06) !important;
-  color: #111111 !important;
-  border: none !important;
-}
-body .side-menu .menu-btn.active span,
-body .side-menu .menu-btn.active svg {
-  color: #111111 !important;
-  fill: #111111 !important;
-}
-
-/* Hover/interaction */
-body .side-menu .menu-btn:hover {
-  background: linear-gradient(90deg, #cfcfd1 0%, #efefef 100%) !important;
-  box-shadow: inset 28px 0 32px rgba(0,0,0,0.10) !important;
-}
-
-/* Ensure main content offset matches */
-.main-content-with-menu { margin-left: 180px !important; }
-
-/* Ensure footer icon buttons inside the side-menu are visible and grey by default */
-body .side-menu .menu-footer .icon-btn {
-  background: transparent !important;
-  border: none !important;
-  width: 44px !important;
-  height: 44px !important;
-  padding: 6px !important;
-  border-radius: 12px !important;
-  color: #8a8a8a !important;
-  box-shadow: none !important;
-}
-body .side-menu .menu-footer .icon-btn svg,
-body .side-menu .menu-footer .icon-btn svg path,
-body .side-menu .menu-footer .icon-btn svg circle,
-body .side-menu .menu-footer .icon-btn svg g {
-  fill: #8a8a8a !important;
-  stroke: #8a8a8a !important;
-  width: 22px !important;
-  height: 22px !important;
-  opacity: 0.95 !important;
-}
-/* keep footer icons visually identical on hover/focus */
-/* keep footer icons visually identical on hover/focus */
-body .side-menu .menu-footer .icon-btn:hover svg,
-body .side-menu .menu-footer .icon-btn:focus svg {
-  fill: #8a8a8a !important;
-  stroke: #8a8a8a !important;
-}
-
-/* Ensure icon buttons do not display border or shadow on hover (global safety) */
-body .side-menu .menu-footer .icon-btn:hover,
-body .side-menu .menu-footer .icon-btn:focus {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Ensure hover and active states are identical: darker-left -> lighter-right pill */
-.side-menu .menu-btn:hover,
-.side-menu .menu-btn.active,
-body .side-menu .menu-btn:hover,
-body .side-menu .menu-btn.active {
-  background: linear-gradient(90deg, #cfcfd1 0%, #efefef 100%) !important;
-  box-shadow: inset 28px 0 32px rgba(0,0,0,0.10) !important;
-  color: #111111 !important;
-  border: none !important;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
 :root {
-  --global-radius-factor: 1.1; /* increase radii by ~10% */
-  /* global green palette based on provided image (solid olive) */
-  --menu-solid: #6f8f85; /* primary solid olive colour */
-  --bg-beige: var(--menu-solid); /* page background uses same solid */
-  --panel-bg: rgba(255,255,255,0.22); /* brighter panel */
-  --input-bg: #ffffff; /* inputs pure white */
-  --input-border: rgba(46,33,19,0.16); /* stronger input border tone */
-  --accent: #8aa66a;
-  --accent-strong: #6f8a55;
-  --muted: #7b9a7a;
-  --text: #23351f;
+  --admin-bg: #f7f4f0;
+  --admin-surface: #fffdfc;
+  --admin-surface-soft: #f1eae3;
+  --admin-border: rgba(127, 93, 64, 0.18);
+  --admin-border-soft: rgba(127, 93, 64, 0.1);
+  --admin-text: #1b1714;
+  --admin-text-soft: #4d4037;
+  --admin-muted: #8a7b6c;
+  --admin-accent: #b87d54;
+  --admin-accent-dark: #95613f;
+  --admin-success: #3f7a55;
+  --admin-info: #3f6f8e;
+  --admin-danger: #a03030;
+  --admin-warning: #a9792d;
+  --admin-shadow: 0 10px 28px rgba(60, 42, 28, 0.04);
 }
 
-/* Modern / Minimal label + input system */
-:root {
-  --label-size: 0.95rem;
-  --label-weight: 600;
-  --label-muted: rgba(58,46,26,0.9);
-  --input-text: #4a4a4a;
-  --input-minimal-padding: 12px 14px;
-  --input-minimal-radius: calc(5px * var(--global-radius-factor)); /* ~10% more rounded */
-  --button-radius: calc(12px * var(--global-radius-factor)); /* ~10% more rounded */
-  --input-minimal-border: rgba(58,46,26,0.12);
-  --input-minimal-bottom: rgba(58,46,26,0.12);
+* {
+  box-sizing: border-box;
 }
 
-/* Minimal labels: slightly smaller, muted, with good spacing */
-.inventory-form label,
-.table-card label,
-.main-title + .glass-card ~ .glass-card + .inventory-section label {
-  display: block;
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  color: var(--label-muted);
-  /* increase spacing by ~5px from the base 0.6rem to match the requested increase */
-  margin-bottom: calc(0.6rem + 5px);
-  letter-spacing: 0.2px;
-  /* align label left with input's inner text by matching input left padding */
-  padding-left: 16px;
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
 }
 
-/* Minimal inputs: remove heavy box borders, keep a soft bottom border and subtle background */
-.form-card .inventory-form input,
-.form-card .inventory-form select,
-.form-card .inventory-form textarea,
-.table-card input,
-.table-card select,
-.table-card textarea {
-  background: var(--input-bg); /* inputs stay white */
-  border: 1px solid var(--input-minimal-border);
-  padding: var(--input-minimal-padding);
-  border-radius: var(--input-minimal-radius);
-  color: var(--text);
-  transition: border-color 160ms ease, box-shadow 180ms ease, transform 120ms ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
-.form-card .inventory-form textarea,
-.table-card textarea { min-height: 140px; padding-top: 14px; }
-
-.form-card .inventory-form input::placeholder,
-.form-card .inventory-form textarea::placeholder,
-.table-card input::placeholder,
-.table-card textarea::placeholder { color: rgba(58,46,26,0.35); font-weight: 500 }
-
-/* Make native date picker/calendar icon appear white */
-.form-card .inventory-form input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1) grayscale(1) brightness(2) contrast(1) !important;
-  opacity: 0.95 !important;
-}
-.form-card .inventory-form input[type="date"]::-moz-calendar-picker-indicator {
-  filter: invert(1) grayscale(1) brightness(2) contrast(1) !important;
-  opacity: 0.95 !important;
-}
-.inventory-form input[type="date"] {
-  color: var(--text);
+button {
+  cursor: pointer;
 }
 
-.form-card .inventory-form input:focus,
-.form-card .inventory-form textarea:focus,
-.table-card input:focus,
-.table-card textarea:focus,
-.form-card .inventory-form select:focus,
-.table-card select:focus {
+svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--admin-border-soft);
+  border-radius: 4px;
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-soft);
+  padding: 9px 12px;
   outline: none;
-  border-bottom-color: rgba(175,133,86,0.9);
-  box-shadow: 0 6px 20px rgba(175,133,86,0.06);
-  transform: translateY(-1px);
+  transition: border-color 160ms ease, background 160ms ease;
 }
 
-/* Slightly lift labels on focus for better affordance */
-.form-card .inventory-form input:focus + label,
-.form-card .inventory-form input:focus ~ label { transform: translateY(-2px); }
-
-/* Compact but readable spacing for form rows */
-.inventory-form .form-row { gap: 1.25rem; }
-
-/* Extra visual polish to better match provided screenshot */
-.form-card {
-  /* Flat white panel with clear dark border to match design */
-  background: #ffffff !important;
-  border-radius: calc(12px * var(--global-radius-factor));
-  padding: 18px;
-  border: 1px solid #111 !important;
-  box-shadow: none !important;
-}
-  .form-card h2 { margin-top: 0; color: rgba(255,255,255,0.95); }
-  .form-card .inventory-form { gap: 1rem; }
-  /* Labels in Add Product form: dark gray for better readability */
-  .form-card .inventory-form label,
-  .inventory-form label {
-    color: var(--label-muted) !important;
-    font-weight: 500;
-  }
-.inventory-form input::placeholder, .inventory-form textarea::placeholder { color: rgba(60,60,60,0.45); }
-.form-card .inventory-form input,
-.form-card .inventory-form select,
-.form-card .inventory-form textarea { background: rgba(255,255,255,0.92); border: 1px solid var(--input-border); color: var(--input-text) !important; }
-.form-card .inventory-form textarea { height: 84px; }
-
-.table-card {
-  /* Match form-card background so form and table panels share the same visual */
-  background: rgba(183,172,152,0.06);
-  border-radius: calc(12px * var(--global-radius-factor));
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-.table-card .full-width-table thead th { color: rgba(255,255,255,0.85); font-size: 0.9rem; }
-.table-card .full-width-table tbody tr { background: transparent; }
-.full-width-table tbody tr td { padding: 0.9rem 1rem; }
-.full-width-table tbody tr td button {
-  float: right;
-  background: rgba(255,255,255,0.16);
-  color: #ffffff;
-  border: 1px solid #ffffff !important;
-  border-radius: 999px;
-  padding: 0.5rem 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--admin-border);
+  background: #fffaf7;
 }
 
-.glass-card { max-width: 1100px; }
-
-/* subtle text tone across the main area */
-.main-content-with-menu, .glass-card, .table-card, .form-card { color: rgba(255,255,255,0.95); }
+input::placeholder,
+textarea::placeholder {
+  color: var(--admin-muted);
+}
 
 label {
-  color: #222 !important;
-  /* normalize vertical gap between label and input to base + 5px */
-  margin-bottom: calc(0.6rem + 5px) !important;
-  display: inline-block;
-  /* nudge labels to the right to align with input inner text */
-  padding-left: 16px !important;
-}
-.inventory-form, .list-content, .glass-card, .wide-list-card {
-  opacity: 1 !important;
-  /* do not force `display` here so `[hidden]` can hide component hosts correctly */
-  visibility: visible !important;
-  /* inherit color from context so cards match the main area */
-  color: inherit !important;
-  /* allow the page gradient to show through behind cards */
-  background: transparent !important;
-  z-index: 1000 !important;
-  position: relative !important;
-  pointer-events: auto !important;
-}
-// Garante que o conteúdo do router-outlet é visível ao lado do menu
-.main-content-with-menu {
-  margin-left: 220px;
-  padding: 3.5rem 3.5rem 2.5rem 3.5rem; /* increased padding so content doesn't touch edges */
-  /* match side-menu background so main area and menu share the same visual (solid) */
-  background: var(--menu-solid) !important;
-  background-repeat: no-repeat !important;
-  background-attachment: scroll !important;
-  min-height: 100vh;
-  width: auto;
   display: block;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  font-weight: 300;
 }
 
-/* Side menu (left) to match screenshot */
-.side-menu {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 220px;
-  padding: 2rem 1rem;
-  /* match global background and remove border to blend with page */
-  /* vertical gradient: darker at top, lighter at bottom */
-  background: var(--menu-solid);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  z-index: 5;
-}
-
-/* Make the nav area take the remaining vertical space and center its buttons */
-.side-menu nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* place buttons right below the logo */
-  align-items: center; /* keep buttons centered horizontally */
-  gap: 12px; /* vertical spacing between buttons */
+table {
   width: 100%;
-  flex: 0 0 auto; /* do not stretch - keep buttons near top under logo */
-  margin-top: 8px; /* small space under logo */
+  border-collapse: collapse;
 }
 
-/* collapsed state: only icons and small logo visible */
-.side-menu.collapsed {
-  width: 72px !important;
-  padding: 1.25rem 0.6rem !important;
-}
-.side-menu.collapsed .logo-area { padding: 6px 0; }
-.side-menu.collapsed .logo-img { width: 72px; height: auto; display: block; margin: 0 auto; }
-.side-menu.collapsed .menu-btn { justify-content: center; padding: 10px; min-width: 48px; border-radius: 9px; }
-.side-menu.collapsed .menu-btn span { display: none !important; }
-.side-menu.collapsed .menu-btn svg { margin: 0; }
-/* menu toggle removed by user preference */
-
-/* ensure the page body uses the same lighter beige */
-/* ensure the page body uses the same gradient as the side menu so the whole app background matches */
-body {
-  background: var(--menu-solid);
-}
-.side-menu .logo-area { width: 100%; display:flex; justify-content:center; }
-.menu-btn {
-  width: auto;
-  min-width: 140px; /* keep buttons narrower than full menu width */
-  background: transparent;
-  border: 1px solid #ffffff !important; /* white border for menu buttons */
-  border-radius: 999px; /* pill */
-  padding: 0.7rem 0.6rem; /* taller (more vertical) and less wide (less horizontal) */
-  color: #ffffff; /* menu text white */
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem; /* smaller gap between icon and text */
-  justify-content: center;
-  margin: 0 auto; /* ensure button block is centered inside side-menu */
-  text-align: center;
-  transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease, border-color 120ms ease;
-}
-.menu-btn:hover {
-  background: linear-gradient(90deg, #cfcfd1 0%, #efefef 100%) !important;
-  box-shadow: inset 28px 0 32px rgba(0,0,0,0.10) !important;
-  transform: translateY(-1px);
+th {
+  padding: 11px 20px;
+  text-align: left;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  font-weight: 300;
+  background: var(--admin-surface-soft);
+  border-bottom: 1px solid var(--admin-border-soft);
+  white-space: nowrap;
 }
 
-.menu-btn svg { width: 18px; height: 18px; display: inline-block; vertical-align: middle; fill: currentColor; opacity: 0.95; }
-.menu-btn span { display: inline-block; font-size: 0.95rem; text-align: center; width: auto; vertical-align: middle; }
-
-menu-btn.active {
-  /* darker left-to-right pill: stronger left shadow */
-  background: linear-gradient(90deg, #d6d6d8 0%, #efefef 100%) !important;
-  box-shadow: inset 26px 0 30px rgba(0,0,0,0.08), 0 6px 14px rgba(0,0,0,0.06);
-  color: #111111 !important; /* black text when active */
-  border: none !important;
-}
-/* Force black text/icons in the side menu */
-.side-menu .menu-btn,
-.side-menu .menu-btn span {
-  color: #111 !important;
-}
-.side-menu .menu-btn svg {
-  fill: #111 !important;
+td {
+  padding: 13px 20px;
+  color: var(--admin-text-soft);
+  font-size: 12px;
+  border-bottom: 1px solid rgba(127, 93, 64, 0.08);
 }
 
-/* Ensure all buttons across the app (except landing page) use white text/icons for contrast */
-body:not(:has(app-auth-page)) button,
-body:not(:has(app-auth-page)) .btn,
-body:not(:has(app-auth-page)) .menu-btn {
-  color: #ffffff !important;
-}
-body:not(:has(app-auth-page)) button svg,
-body:not(:has(app-auth-page)) .btn svg,
-body:not(:has(app-auth-page)) .menu-btn svg {
-  fill: #ffffff !important;
-}
-td, th, .full-width-table td, .full-width-table th {
-  color: #fff !important;
-}
-
-/* Minimal modern button system */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.38rem 0.78rem;
-  border-radius: 999px; /* pill like side menu */
-  background: transparent;
-  border: 1px solid #ffffff !important;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 140ms ease, background 120ms ease, color 120ms ease;
-}
-.btn:active { transform: translateY(1px); }
-.btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.btn--sm { padding: 0.22rem 0.48rem; border-radius: 6px; font-size: 0.9rem; }
-
-/* Pill primary */
-.btn--pill {
-  border-radius: var(--button-radius);
-  padding: 0.38rem 1rem;
-}
-
-/* Primary pill button: match supplied dark pill (icon + text) */
-.btn.btn--primary.btn--pill,
-.btn--primary.btn--pill {
-  /* Exact match for attached 'Adicionar' pill */
-  background: linear-gradient(180deg, #0b0f22 0%, #0f1328 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 8px !important; /* tighter radius to match image */
-  height: 44px !important; /* fixed height for consistent visual */
-  padding: 0 24px !important; /* reduced lateral padding to match other buttons */
-  min-width: 120px !important;
-  display: inline-flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 0 !important;
-  font-weight: 800 !important;
-  font-size: 1.06rem !important; /* bold, slightly larger */
-  line-height: 1 !important;
-  box-shadow: none !important; /* flat look */
-  text-align: center !important;
-  letter-spacing: 0.2px !important;
-  transition: filter 120ms ease !important;
-}
-.btn.btn--primary.btn--pill svg,
-.btn--primary.btn--pill svg {
-  display: none !important; /* no icon inside the pill — text only */
-}
-.btn.btn--primary.btn--pill:hover,
-.btn--primary.btn--pill:hover {
-  /* keep hover subtle and flat to match screenshot */
-  transform: none !important;
-  filter: brightness(1.02) !important;
-  box-shadow: none !important;
-}
-
-/* Page canvas behind cards should be white */
-html, body, .main-content, .main-content-with-menu, .app-shell, .fixed-bg, #main, .page-canvas {
-  background: #ffffff !important;
-  color-scheme: light;
-}
-.fixed-bg, .background-overlay, .page-canvas {
-  background-color: #ffffff !important;
-}
-
-.btn--primary {
-  background: linear-gradient(180deg, rgba(138,106,65,1), rgba(111,78,47,1));
-  color: #fff;
-  border: none;
-  box-shadow: 0 6px 18px rgba(111,78,47,0.12);
-}
-.btn--primary:hover { filter: brightness(1.04); }
-
-/* Standardize all buttons to match the Guardar pill appearance */
-button, .btn, input[type="submit"], input[type="button"], .btn--primary, .btn--sm {
-  background: linear-gradient(90deg, #0b0f22 0%, #0f1328 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: var(--button-radius) !important;
-  padding: 10px 18px !important;
-  font-weight: 800 !important;
-  font-size: 0.96rem !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.5rem !important;
-  text-align: center !important;
-  box-shadow: none !important;
-}
-
-/* Make the primary pill button (Guardar) match other buttons with 8px radius */
-.btn.btn--primary.btn--pill,
-.btn--primary.btn--pill {
-  border-radius: 8px !important;
-}
-button svg, .btn svg, input[type="submit"] svg { width: 16px !important; height: 16px !important; margin-right: 6px !important; fill: #fff !important; }
-
-/* Make smaller buttons consistent but slightly reduced */
-.btn--sm { padding: 6px 10px !important; border-radius: calc(var(--button-radius) - 4px) !important; font-size: 0.85rem !important; }
-
-/* Inputs and selects: match Add Product card visuals sitewide */
-body input, body select, body textarea {
-  background: #ffffff !important;
-  border: 1px solid #111 !important;
-  color: var(--input-text) !important;
-  padding: var(--input-minimal-padding) !important;
-  border-radius: var(--input-minimal-radius) !important;
-  font-size: 0.95rem !important;
-  box-shadow: none !important;
-}
-body label { color: var(--label-muted) !important; font-weight: var(--label-weight) !important; font-size: var(--label-size) !important; }
-
-/* Keep native placeholder tone consistent */
-body input::placeholder, body textarea::placeholder, body select::placeholder { color: rgba(58,46,26,0.35) !important; }
-
-/* Outline / ghost */
-.btn--outline {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid #ffffff !important;
-  color: #ffffff;
-}
-.btn--outline:hover { background: rgba(255,255,255,0.06); }
-
-.btn--ghost {
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.92);
-}
-.btn--ghost:hover { background: rgba(255,255,255,0.03); }
-
-/* Small icon-only button */
-.btn--icon {
-  padding: 0.28rem;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
   justify-content: center;
-}
-.btn svg { width: 16px; height: 16px; display: block; fill: currentColor; }
-
-/* Ensure all SVG icons are white (buttons, menu, table icons) */
-button svg,
-.btn svg,
-.menu-btn svg,
-.btn--icon-circle svg {
-  fill: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
-/* Force calendar/date picker's icon to appear white where possible */
-.form-card .inventory-form input[type="date"]::-webkit-calendar-picker-indicator,
-.table-card input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="date"]::-webkit-clear-button {
-  filter: invert(1) grayscale(1) brightness(2) !important;
-  opacity: 1 !important;
-}
-.form-card .inventory-form input[type="date"]::-moz-calendar-picker-indicator,
-.table-card input[type="date"]::-moz-calendar-picker-indicator {
-  filter: invert(1) grayscale(1) brightness(2) !important;
-  opacity: 1 !important;
+  gap: 7px;
+  min-height: 36px;
+  padding: 9px 18px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--admin-text-soft);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
-/* Circular minimal icon buttons (no visible border) used for edit/delete) */
+.btn-primary,
+.btn--primary {
+  background: var(--admin-accent);
+  color: #1a1410;
+  border-color: var(--admin-accent);
+}
+
+.btn-primary:hover,
+.btn--primary:hover {
+  background: var(--admin-accent-dark);
+  border-color: var(--admin-accent-dark);
+}
+
+.btn-ghost,
+.btn--ghost {
+  background: rgba(127, 93, 64, 0.05);
+  border-color: var(--admin-border-soft);
+  color: var(--admin-text-soft);
+}
+
+.btn-ghost:hover,
+.btn--ghost:hover {
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
 .btn--icon-circle {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  min-height: 40px !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(255,255,255,0.04) !important;
-  border: none !important;
-  color: #ffffff !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-  flex-shrink: 0 !important;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+  border-radius: 4px;
+  background: var(--admin-surface-soft);
+  border: 1px solid var(--admin-border-soft);
+  color: var(--admin-muted);
 }
 
-.btn--icon-circle svg { 
-  width: 20px !important; 
-  height: 20px !important; 
-  min-width: 20px !important;
-  min-height: 20px !important;
-  flex-shrink: 0 !important;
-  display: block !important;
+.btn--success {
+  color: var(--admin-success);
 }
 
-.btn--icon-circle:hover { 
-  background: rgba(255,255,255,0.08) !important; 
-}
-
-.btn--icon-circle:active {
-  transform: scale(0.95) !important;
-}
-
-/* Inputs in Add Product form: enforce black borders for clear contrast */
-.form-card .inventory-form input,
-.form-card .inventory-form select,
-.form-card .inventory-form textarea {
-  border: 1px solid #111111 !important;
-  box-shadow: none !important;
-  background: #ffffff !important;
-  color: #111 !important;
-}
-
-/* Specifically ensure the 'name' input (placeholder "Nome do produto") has a black border too */
-.form-card .inventory-form input[name="name"],
-.form-card .inventory-form input[placeholder*="Nome"] {
-  border: 1px solid #000000 !important;
-}
-
-/* Also ensure the 'brand' input has a black border (placeholder: Marca) */
-.form-card .inventory-form input[name="brand"],
-.form-card .inventory-form input[placeholder*="Marca"] {
-  border: 1px solid #000000 !important;
-}
-
-/* Ensure category select (and other selects in Add Product form) have a black border */
-.form-card .inventory-form select,
-.form-card .inventory-form select[name="category"],
-.form-card .inventory-form select[placeholder*="Categoria"] {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-
-/* Small tweak to ensure the dropdown arrow remains visible and spacing looks consistent */
-.form-card .inventory-form select { padding-right: 2.2rem !important; }
-
-/* Ensure 'unit' select (e.g., 'un', 'ml') in Add Product form has a black border */
-.form-card .inventory-form select[name="unit"],
-.form-card .inventory-form select[placeholder*="un"],
-.form-card .inventory-form select[placeholder*="ml"] {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  padding-right: 2.2rem !important;
-}
-
-/* Ensure number inputs in Add Product form (e.g., min_quantity) have black borders */
-.form-card .inventory-form input[type="number"],
-.form-card .inventory-form input[name="min_quantity"] {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-}
-
-/* Ensure date inputs in Add Product form have a black border too */
-.form-card .inventory-form input[type="date"],
-.form-card .inventory-form input[name="date"] {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-}
-
-/* Ensure supplier input has black border too */
-.form-card .inventory-form input[name="supplier"],
-.form-card .inventory-form input[placeholder*="Fornecedor"] {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-}
-
-/* Ensure notes textarea in Add Product form has a black border */
-.form-card .inventory-form textarea[name="notes"],
-.form-card .inventory-form textarea {
-  border: 1px solid #000000 !important;
-  background: #ffffff !important;
-  color: #111111 !important;
-  box-shadow: none !important;
-  resize: vertical !important;
-}
-
-/* Actions cell: flex layout for proper icon spacing */
-.actions-cell {
-  display: flex !important;
-  gap: 0 !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-}
-
-/* Ensure danger variant on icon circle is still minimal (no heavy red bg) */
-.btn--danger.btn--icon-circle {
-  background: rgba(255,255,255,0.04) !important;
-  color: #ffffff !important;
-}
-
-.btn--success.btn--icon-circle {
-  background: rgba(255,255,255,0.04) !important;
-  color: #ffffff !important;
-}
-
-.btn--primary.btn--icon-circle {
-  background: rgba(255,255,255,0.04) !important;
-  color: #ffffff !important;
-}
-
-.btn--ghost.btn--icon-circle {
-  background: rgba(255,255,255,0.04) !important;
-  color: #ffffff !important;
-}
-
-/* subdued danger */
 .btn--danger {
-  background: linear-gradient(180deg, rgba(255,107,107,0.95), rgba(232,92,92,0.95));
-  color: #fff;
-  border: none;
-}
-.btn--danger:hover { filter: brightness(0.98); }
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100vw;
-  z-index: 10;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-.main-flex {
-  margin-top: 40px;
-  margin-left: 200px;
-  max-width: 1400px;
-}
-body.beige-theme .logo-dark {
-  // Modern glassmorphism card on beige
-  .glass-card {
-    background: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    padding: 2.2rem 2.5rem 1.7rem 2.5rem;
-    max-width: none;
-    width: 85vw;
-    margin: 0 auto 2.5rem auto;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    transition: none !important;
-  }
-}
-body.beige-theme .logo-light {
-  display: none !important;
+  color: var(--admin-danger);
 }
 
-body.black-theme {
-  background: #222 !important;
-}
-body.black-theme .glass-card {
-  background: #333 !important;
+.amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--admin-text);
+  font-size: 14px;
+  font-weight: 400;
 }
 
-/* Global toast host for notifications */
 .app-toast-host {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
+  right: 24px;
+  bottom: 24px;
+  z-index: 10000;
+  display: grid;
   gap: 8px;
-  align-items: center;
-  pointer-events: none; /* allow clicks through except on the toast itself */
 }
+
 .app-toast {
-  pointer-events: auto;
-  padding: 14px 20px;
-  border-radius: 14px;
-  color: #ffffff;
-  font-weight: 700;
-  min-width: 360px;
-  max-width: 90vw;
-  background: var(--menu-solid) !important;
-  border: none !important;
-  box-shadow: none !important;
-  text-align: center;
-}
-.app-toast[data-type="success"] { border-left: none !important; }
-.app-toast[data-type="error"] { border-left: none !important; }
-.app-toast[data-type="info"] { border-left: none !important; }
-body.black-theme .logo-dark {
-  display: block !important;
-  filter: none !important;
-}
-body.black-theme .logo-light {
-  display: none !important;
-}
-.logo-dark {
-  display: block;
-}
-.logo-light {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo-dark {
-    display: none;
-  }
-  .logo-light {
-    display: block;
-  }
-
-.header-logo-row {
-  display: flex;
-  align-items: center;
-  gap: 2.2rem;
-}
-
-.logo-bg {
-  background: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 32px;
-  padding-bottom: 32px;
-  border-radius: 1.2rem;
-  padding-left: 1.1rem;
-  padding-right: 1.1rem;
-  box-shadow: none !important;
-}
-}
-
-.logo-img {
-  height: 88px;
-  width: auto;
-  display: block;
-}
-
-/* Make the outer glass cards fully transparent so inner .form-card/.table-card show as the visible panels */
-.glass-card.wide-list-card {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important; /* keep inner panels' padding instead */
-  margin: 1.25rem 0; /* add vertical gutter so cards don't touch page edges */
-  box-shadow: 0 10px 30px rgba(46,33,19,0.06); /* soft outer shadow */
-}
-
-/* add spacing between stacked wide cards */
-.glass-card.wide-list-card + .glass-card.wide-list-card {
-  margin-top: 22px;
-}
-
-.main-title {
-  font-size: 2.1rem;
-  font-weight: 700;
-  margin: 0;
-}
-.form-card {
-  background: var(--panel-bg);
-  border-radius: 14px;
-  padding: 26px 30px; /* slightly more inner padding */
-  border: none !important;
-  box-shadow: 0 10px 24px rgba(24,18,12,0.06); /* stronger soft shadow for panel edges */
-}
-
-/* Keep the add form visible while the page scrolls ---------------------------------- */
-.form-card {
-  position: sticky;
-  top: 110px; /* distance from top of viewport (adjust if you have a header) */
-  z-index: 30;
-  max-height: calc(100vh - 140px); /* allow internal scrolling if form is tall */
-  overflow: auto;
-}
-/* --- Apply form visuals to table card --- */
-.table-card {
-  /* use same panel background as the form for a consistent look */
-  background: var(--panel-bg) !important;
-  border-radius: 14px;
-  padding: 26px 30px;
-  border: none !important;
-  box-shadow: 0 10px 24px rgba(24,18,12,0.06);
-}
-
-.table-card label,
-.table-card .full-width-table label {
-  display: block;
-  font-size: var(--label-size);
-  font-weight: var(--label-weight);
-  color: var(--label-muted);
-  margin-bottom: calc(0.6rem + 5px);
-  padding-left: 16px;
-  letter-spacing: 0.2px;
-}
-
-.table-card input,
-.table-card select,
-.table-card textarea,
-.table-card .full-width-table input,
-.table-card .full-width-table select,
-.table-card .full-width-table textarea {
-  background: transparent !important;
-  color: #ffffff !important;
-  border: 1px solid #ffffff !important;
-  padding: var(--input-minimal-padding) !important;
-  border-radius: var(--input-minimal-radius) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.table-card input::placeholder,
-.table-card textarea::placeholder,
-.table-card select::placeholder,
-.table-card input::-webkit-input-placeholder,
-.table-card textarea::-webkit-input-placeholder,
-.table-card select::-webkit-input-placeholder,
-.table-card input::-moz-placeholder,
-.table-card textarea::-moz-placeholder,
-.table-card select::-moz-placeholder,
-.table-card input:-ms-input-placeholder,
-.table-card textarea:-ms-input-placeholder,
-.table-card select:-ms-input-placeholder {
-  color: rgba(255,255,255,0.92) !important;
-  opacity: 1 !important;
-}
-
-.table-card .full-width-table thead th { color: rgba(255,255,255,0.95); }
-.glass-card > .list-area {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-.list-area {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.glass-card > *,
-.glass-card .form-area,
-.glass-card .list-area {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.inventory-form {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.full-width-table {
-  width: 100%;
-  min-width: 900px;
-  border-collapse: collapse;
-  background: transparent;
-}
-
-.full-width-table th,
-.full-width-table td {
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-  background: transparent;
-  color: #ffffffdd !important;
-
-}
-// Forçar texto branco em toda a tabela, com alta especificidade
-table, table * {
-  color: #fff !important;
-}
-
-.inventory-form button {
-  color: #fff !important;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.9rem 1.25rem;
-  border-radius: 999px;
-  border: 1px solid #ffffff !important;
-  background: transparent;
-}
-
-/* Make inputs in the form pill-shaped to match menu and buttons */
-.form-card .inventory-form input,
-.form-card .inventory-form select,
-.form-card .inventory-form textarea,
-.inventory-form input,
-.inventory-form select,
-.inventory-form textarea {
-  /* moderate rounding to match buttons but not fully pill-shaped */
-  border-radius: 16px !important;
-  padding: 0.75rem 1rem !important;
-  border: 1px solid #ffffff !important;
-  background: transparent !important;
-  color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
-  min-height: 44px; /* ensure sufficient height for rounded look */
-}
-
-/* Reduce vertical gap between Observações (textarea) and the Save button */
-.form-card .inventory-form textarea {
-  margin-bottom: 8px !important;
-  min-height: 120px; /* keep readable size */
-}
-
-.form-card .inventory-form button {
-  margin-top: 6px !important;
-}
-// Forçar texto branco em todos os labels, inputs e placeholders do formulário
-.inventory-form label,
-.inventory-form label * {
-  /* modern muted label color and stronger weight */
-  color: var(--muted) !important;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.2px;
-}
-
-/* Modern input styles (applies across form and list inputs) */
-:root {
-  --input-radius: calc(12px * var(--global-radius-factor));
-  --input-padding: 14px 16px;
-  --input-border: rgba(0,0,0,0.12);
-  --input-bg: rgba(255,255,255,0.88);
-  --input-inset: rgba(255,255,255,0.6);
-  --focus-shadow: 0 0 0 6px rgba(175,133,86,0.12);
-}
-
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="search"],
-select,
-textarea {
-  background: var(--input-bg);
-  border-radius: var(--input-radius);
-  border: 1px solid #ffffff !important;
-  padding: var(--input-padding);
-  outline: none;
-  transition: box-shadow 160ms ease, transform 120ms ease, border-color 120ms ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
-  color: var(--text);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-textarea { min-height: 120px; resize: vertical; }
-
-/* Placeholder color: white for modern aesthetic (inputs and textareas)
-   Includes vendor fallbacks and uses !important to override earlier rules */
-input::placeholder,
-textarea::placeholder,
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder,
-input::-moz-placeholder,
-textarea::-moz-placeholder,
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  color: rgba(255,255,255,0.9) !important;
-  opacity: 1 !important;
-  font-weight: 500;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: rgba(175,133,86,0.9);
-  box-shadow: var(--focus-shadow);
-  transform: translateY(-1px);
-}
-
-/* remove default select arrow visual differences on mac/windows while keeping accessibility */
-select { background-image: linear-gradient(45deg, transparent 50%, rgba(0,0,0,0.35) 50%), linear-gradient(135deg, rgba(0,0,0,0.35) 50%, transparent 50%); background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
-
-/* Form field label helper spacing */
-.form-row { display:flex; gap:16px; align-items:flex-start }
-.form-row .form-field { flex:1 }
-
-/* Handle labels that wrap inputs inline (e.g. <label>Text <input/></label>)
-   - Make the label a block so the text sits above the input
-   - Add left padding so the label text lines up with the input's inner text
-   - Add top margin on the input to create the requested vertical gap */
-.form-row label {
-  display: block;
-  padding-left: 16px; /* match input inner padding */
-}
-.form-row label input,
-.form-row label textarea,
-.form-row label select {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: calc(0.6rem + 5px); /* vertical gap between label text and the input */
-  padding-left: 16px; /* ensure input content lines up with label text */
-}
-
-/* Also handle labels that wrap a textarea outside of .form-row (e.g. Observações) */
-.inventory-form > label {
-  display: block;
-  width: 100%;
-  padding-left: 16px; /* align label text with inputs */
-  box-sizing: border-box;
-}
-/* Force labels that wrap inputs/textarea to use the dark-muted label color */
-.form-card .inventory-form > label,
-.form-card .inventory-form > label:has(textarea) {
-  color: var(--label-muted) !important;
-  font-weight: 600 !important;
-}
-/* Ensure the 'Observações' label (textarea outside .form-row) uses the dark-muted label color */
-.form-card .inventory-form > label,
-.form-card .inventory-form label[for="notes"],
-.inventory-form > label[for="notes"] {
-  color: var(--label-muted) !important;
-  font-weight: 600 !important;
-}
-.inventory-form > label textarea {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: calc(0.6rem + 5px);
-  padding-left: 16px;
-}
-
-/* Buttons tied to inputs */
-.btn { border-radius: 10px; padding: 10px 16px; font-weight:600 }
-
-
-/* Placeholder and field text rules consolidated later — keep final defaults below */
-
-/* Force all form and table inputs to have the same white background and consistent text color */
-.inventory-form input,
-.inventory-form select,
-.inventory-form textarea,
-.table-card input,
-.table-card select,
-.table-card textarea,
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
-  /* inputs should visually match their container panel; use transparent so the
-     .form-card/.table-card background shows through */
-  background: transparent !important;
-  color: var(--text) !important; /* use theme text color on panel */
-  border-color: #ffffff !important;
-}
-
-/* Make input text and placeholders white inside form and table panels as requested */
-.form-card .inventory-form input,
-.form-card .inventory-form textarea,
-.form-card .inventory-form select,
-.table-card input,
-.table-card textarea,
-.table-card select,
-.inventory-form input,
-.inventory-form textarea,
-.inventory-form select {
-  color: #ffffff !important;
-}
-
-.form-card .inventory-form input::placeholder,
-.form-card .inventory-form textarea::placeholder,
-.form-card .inventory-form select::placeholder,
-.inventory-form input::placeholder,
-.inventory-form textarea::placeholder,
-.inventory-form select::placeholder,
-.table-card input::placeholder,
-.table-card textarea::placeholder,
-.table-card select::placeholder,
-.inventory-form input::-webkit-input-placeholder,
-.inventory-form textarea::-webkit-input-placeholder,
-.inventory-form select::-webkit-input-placeholder,
-.inventory-form input::-moz-placeholder,
-.inventory-form textarea::-moz-placeholder,
-.inventory-form select::-moz-placeholder,
-.inventory-form input:-ms-input-placeholder,
-.inventory-form textarea:-ms-input-placeholder,
-.inventory-form select:-ms-input-placeholder {
-  color: rgba(255,255,255,0.92) !important;
-  opacity: 1 !important;
-}
-
-/* Make placeholders and text for Nome do Produto and Marca explicitly white */
-.inventory-form input[name="name"],
-.inventory-form input[name="brand"] {
-  color: #ffffff !important;
-}
-.inventory-form input[name="name"]::placeholder,
-.inventory-form input[name="brand"]::placeholder,
-.inventory-form input[name="name"]::-webkit-input-placeholder,
-.inventory-form input[name="brand"]::-webkit-input-placeholder,
-.inventory-form input[name="name"]::-moz-placeholder,
-.inventory-form input[name="brand"]::-moz-placeholder,
-.inventory-form input[name="name"]:-ms-input-placeholder,
-.inventory-form input[name="brand"]:-ms-input-placeholder {
-  color: rgba(255,255,255,0.95) !important;
-  opacity: 1 !important;
-}
-
-/* Make placeholders visible on white backgrounds (dark placeholder) */
-.inventory-form input::placeholder,
-.inventory-form textarea::placeholder,
-.inventory-form input::-webkit-input-placeholder,
-.inventory-form textarea::-webkit-input-placeholder,
-.inventory-form input::-moz-placeholder,
-.inventory-form textarea::-moz-placeholder,
-.inventory-form input:-ms-input-placeholder,
-.inventory-form textarea:-ms-input-placeholder {
-  color: rgba(58,46,26,0.45) !important;
-  opacity: 1 !important;
-}
-
-.full-width-table tr td,
-.full-width-table tr th {
-  border: none;
-}
-// Make table fill the card width
-.full-width-table {
-  width: 100%;
-  min-width: 900px;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--menu-solid);
-  color: #222;
-  min-height: 100vh;
-}
-
-.fixed-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  /* use the same solid colour as the side-menu so the fixed background matches */
-  background: var(--menu-solid);
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  z-index: 0;
-  pointer-events: none; /* allow clicks through to app content */
-}
-
-.main-flex {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.glass-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 1.2rem;
-  box-shadow: 0 8px 24px rgba(25,25,25,0.08);
-  padding: 2.2rem 2.5rem 1.7rem 2.5rem;
-  box-sizing: border-box;
-  max-width: none;
-  width: 85vw;
-  width: 100% !important;
-  box-sizing: border-box;
-  backdrop-filter: blur(6px) saturate(120%);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  margin: 0 auto;
-  transition: box-shadow 0.2s;
-}
-
-.glass-card:focus-within, .glass-card:hover {
-  box-shadow: none !important;
-}
-
-/* Final override: force Nome/Marca input text + placeholders to white across themes
-   Uses very high specificity and vendor-prefixed pseudo-elements to override other rules. */
-.form-card .inventory-form input[name="name"],
-.form-card .inventory-form input[name="brand"],
-.inventory-form input[name="name"],
-.inventory-form input[name="brand"] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important; /* for WebKit-based browsers */
-}
-.form-card .inventory-form input[name="name"]::placeholder,
-.form-card .inventory-form input[name="brand"]::placeholder,
-.inventory-form input[name="name"]::placeholder,
-.inventory-form input[name="brand"]::placeholder,
-.form-card .inventory-form input[name="name"]::-webkit-input-placeholder,
-.form-card .inventory-form input[name="brand"]::-webkit-input-placeholder,
-.inventory-form input[name="name"]::-webkit-input-placeholder,
-.inventory-form input[name="brand"]::-webkit-input-placeholder,
-.form-card .inventory-form input[name="name"]::-moz-placeholder,
-.form-card .inventory-form input[name="brand"]::-moz-placeholder,
-.inventory-form input[name="name"]::-moz-placeholder,
-.inventory-form input[name="brand"]::-moz-placeholder,
-.form-card .inventory-form input[name="name"]:-ms-input-placeholder,
-.form-card .inventory-form input[name="brand"]:-ms-input-placeholder,
-.inventory-form input[name="name"]:-ms-input-placeholder,
-.inventory-form input[name="brand"]:-ms-input-placeholder {
-  color: rgba(255,255,255,0.96) !important;
-  opacity: 1 !important;
-}
-
-/* Table card styling */
-.list-section {
-  margin-top: 1.6rem;
-}
-.table-card {
-  background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 1rem;
-  padding: 1.2rem 1.6rem;
-  margin-top: 1.2rem;
-}
-
-.full-width-table {
-  width: 100%;
-  background: transparent;
-}
-
-.full-width-table th { text-align: left; font-weight: 600; font-size: 0.95rem; opacity: 0.95; }
-.full-width-table td { opacity: 0.95; }
-
-/* Delete button style */
-.full-width-table button {
-  background: rgba(255,255,255,0.12);
-  border: none;
-  color: #fff;
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-}
-
-.subtitle {
-  color: #6a6a8b;
-  font-size: 1.08rem;
-  margin-bottom: 1.2rem;
-}
-.app-shell {
-  width: 100%;
-  margin-bottom: 4px;
-  max-width: none;
-  margin: 0 auto;
-  padding: 2.5rem 20px 2rem 20px;
-}
-
-.app-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-
-.app-header h1 {
-  font-size: 2.1rem;
-  font-weight: 600;
-  color: #fff !important;
-  background: #9e8e7c;
-}
-
-.app-header p {
-  color: #888;
-  font-size: 1.05rem;
-  margin: 0;
-}
-
-.card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  box-shadow: none !important;
-  margin-bottom: 2rem;
-  border: 1px solid #f0f0f0;
-}
-
-.inventory-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.form-row {
-  display: flex;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-}
-
-.form-row label {
-  flex: 1 1 180px;
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  color: #fff !important;
-    color: #fff !important;
-  gap: 0.3rem;
-}
-
-.form-row .full-width {
-  flex: 1 1 100%;
-}
-
-input, select, textarea {
-  font-family: inherit;
-  font-size: 1.08rem;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 0.7rem 1.1rem;
-  background: rgba(255,255,255,0.92);
-  color: #3a2e1a;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 8px rgba(20,20,20,0.04);
-  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: #b7ac98;
-  background: #f5f2ec;
-  color: #3a2e1a;
-  box-shadow: 0 2px 12px 0 rgba(80,80,80,0.13);
-}
-
-/* Make native button tag match the menu/.btn pill style */
-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 999px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.18);
-  color: #ffffff !important;
-  font-size: 1.02rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background 140ms ease, transform 100ms ease, box-shadow 140ms ease, border-color 120ms ease;
-  margin-top: 0.5rem;
-}
-
-button:hover {
-  background: rgba(255,255,255,0.04);
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.28);
-}
-
-button:disabled {
-  background: rgba(255,255,255,0.02);
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-// .table kept for legacy, but .full-width-table overrides for inventory list
-
-@media (max-width: 700px) {
-  .app-shell {
-    padding: 1rem 0.2rem;
-  }
-
-/* User-requested global white background override */
-/* Make backgrounds white and text dark across the app */
-html, body, .main-content-with-menu, .glass-card, .form-card, .table-card, .card, .app-shell {
-  background: #ffffff !important;
-  color: #000000 !important;
-  background-image: none !important;
-}
-.fixed-bg { display: none !important; }
-.side-menu {
-  background: #f6f6f7 !important;
-  border-right: 1px solid #f0f0f0 !important;
-}
-.side-menu .menu-btn, .menu-btn {
-  background: transparent !important;
-  color: #000000 !important;
-  border-color: rgba(0,0,0,0.06) !important;
-}
-.btn, button {
-  color: #000 !important;
-  border-color: rgba(0,0,0,0.08) !important;
-  background: transparent !important;
-}
-.form-card .inventory-form input,
-.form-card .inventory-form textarea,
-.form-card .inventory-form select,
-.table-card input,
-.table-card textarea,
-.table-card select,
-.inventory-form input,
-.inventory-form textarea,
-.inventory-form select,
-input, textarea, select {
-  background: #fff !important;
-  color: #000 !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-}
-.full-width-table td, .full-width-table th, table, table * {
-  color: #000 !important;
-}
-
-/* Side-menu restyling to match provided white sidebar image */
-.side-menu {
-  background: #e6e6e8 !important;
-  border-right: 1px solid #f0f0f0 !important;
-  box-shadow: 0 6px 18px rgba(20,20,20,0.04) !important;
-  align-items: flex-start !important;
-  padding: 1.2rem 0.9rem !important;
-  width: 200px !important;
-}
-
-.side-menu .logo-area {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-left: 8px;
-  padding-bottom: 6px;
-}
-
-.side-menu nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 10px;
-  width: 100%;
-  margin-top: 6px;
-}
-
-.menu-btn {
-  width: 100% !important;
-  justify-content: flex-start !important;
-  padding: 0.78rem 0.9rem !important;
-  min-width: 0 !important;
-  border: none !important;
-  background: transparent !important;
-  color: #333333 !important;
-  font-weight: 600 !important;
-  gap: 12px !important;
-  border-radius: calc(12px * var(--global-radius-factor)) !important;
-  text-align: left !important;
-  display: inline-flex !important;
-  align-items: center !important;
-}
-
-.menu-btn svg {
-  width: 20px !important;
-  height: 20px !important;
-  margin-left: 6px !important;
-  margin-right: 6px !important;
-  fill: #7a7a7a !important;
-  opacity: 0.95 !important;
-}
-
-.menu-btn span {
-  flex: 1 1 auto !important;
-  text-align: left !important;
-  color: #333333 !important;
-}
-
-.menu-btn:not(.active) {
-  color: #6f6f74 !important; /* slightly muted for inactive */
-}
-
-menu-btn.active {
-  /* darker left-to-right pill: stronger left shadow */
-  background: linear-gradient(90deg, #d6d6d8 0%, #efefef 100%) !important;
-  box-shadow: inset 26px 0 30px rgba(0,0,0,0.08), 0 6px 14px rgba(0,0,0,0.06) !important;
-  color: #111111 !important;
-  border: none !important;
-}
-
-/* Remove any strong white text forcing inside the menu for better contrast */
-.side-menu .menu-btn, .side-menu .menu-btn span, .side-menu .menu-btn svg {
-  color: inherit !important;
-}
-
-/* Ensure main content margin matches new menu width */
-.main-content-with-menu { margin-left: 240px !important; }
-
-/* Strong overrides to ensure inactive buttons are grey and active is black */
-body .side-menu .menu-btn,
-body .side-menu .menu-btn span {
-  color: #8a8a8a !important; /* inactive grey */
-}
-
-body .side-menu .menu-btn svg {
-  fill: #9b9b9b !important;
-  stroke: none !important;
-  opacity: 0.95 !important;
-}
-
-/* Active button: black text, no border, beige pill */
-body .side-menu .menu-btn.active {
-  /* darker left-to-right pill: stronger left shadow */
-  background: linear-gradient(90deg, #d6d6d8 0%, #efefef 100%) !important;
-  box-shadow: inset 26px 0 30px rgba(0,0,0,0.08), 0 6px 14px rgba(0,0,0,0.06) !important;
-  color: #111111 !important;
-  border: none !important;
-}
-body .side-menu .menu-btn.active svg {
-  fill: #111111 !important;
-}
-
-/* Tighter vertical spacing and left alignment */
-.side-menu nav { gap: 8px !important; }
-.menu-btn { padding-left: 18px !important; padding-right: 14px !important; gap: 10px !important; }
-
-/* Subtle hover for menu items */
-.side-menu .menu-btn:hover {
-  background: linear-gradient(90deg, #cfcfd1 0%, #efefef 100%) !important;
-  box-shadow: inset 28px 0 32px rgba(0,0,0,0.10) !important;
-}
-
-/* Ensure earlier global rules that set white text are overridden */
-.side-menu .menu-btn, .side-menu .menu-btn span, .side-menu .menu-btn svg { color: unset !important; }
-
-  .card {
-    padding: 1.2rem 0.5rem;
-  }
-  .form-row {
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-  .side-menu {
-    width: 100vw;
-    height: auto;
-    position: static;
-    flex-direction: row;
-    padding-top: 0;
-    border-right: none;
-    border-bottom: 1.5px solid #cfc2a8;
-  }
-  .main-content-with-menu {
-    margin-left: 0;
-    padding: 1rem;
-  }
-
-  /* Hide all placeholder text globally as requested */
-  input::placeholder,
-  textarea::placeholder,
-  select::placeholder,
-  input::-webkit-input-placeholder,
-  textarea::-webkit-input-placeholder,
-  select::-webkit-input-placeholder,
-  input::-moz-placeholder,
-  textarea::-moz-placeholder,
-  select::-moz-placeholder,
-  input:-ms-input-placeholder,
-  textarea:-ms-input-placeholder,
-  select:-ms-input-placeholder {
-    color: transparent !important;
-    opacity: 0 !important;
-  }
-}
-
-/* Global override: force consistent small radius for all inputs, selects, textareas and buttons
-   User requested a uniform `border-radius: 4.4px !important` across form controls and buttons. */
-input, select, textarea, button, .btn, .menu-btn {
-  border-radius: 4.4px !important;
-}
-
-/* High-specificity overrides to catch component-scoped rules that still set other radii.
-   These selectors combine container classes with element selectors to increase specificity
-   above attribute-scoped component styles injected by Angular. */
-body .form-card .inventory-form input,
-body .form-card .inventory-form select,
-body .form-card .inventory-form textarea,
-body .form-card button,
-body .form-card .save-btn,
-body .inventory-form .form-row input,
-body .inventory-form .form-row select,
-body .inventory-form .form-row textarea,
-body .table-card input,
-body .table-card select,
-body .table-card textarea,
-body .full-width-table button,
-body .side-menu .menu-btn,
-body .menu-btn,
-body .btn,
-body button,
-body input,
-body select,
-body textarea {
-  border-radius: 4.4px !important;
-}
-/* Pre-login landing page: body background */
-body:has(app-auth-page) {
-  background: #fff !important;
+  padding: 13px 18px;
+  border-radius: 6px;
+  background: var(--admin-surface-soft);
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 8px 32px rgba(60, 42, 28, 0.16);
+  color: var(--admin-text-soft);
+  font-size: 12px;
 }

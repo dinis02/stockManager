@@ -1,96 +1,65 @@
 <div class="list-content">
-  <!-- Filters Section -->
-  <div class="filters-section">
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      <input 
-        type="text" 
-        [(ngModel)]="searchQuery" 
-        (input)="onSearchChange()" 
-        placeholder="Pesquisar por nome, marca, fornecedor..." 
-        class="search-input"
+  <div class="table-toolbar">
+    <span class="table-title">Todos os produtos</span>
+
+    <div class="table-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchChange()"
+        placeholder="Pesquisar produtos..."
       />
     </div>
 
-    <div class="filter-controls">
-      <div class="filter-group">
-        <label>Categoria:</label>
-        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-          <option *ngFor="let cat of categories">{{ cat }}</option>
-        </select>
-      </div>
+    <select class="filter-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+      <option *ngFor="let cat of categories">{{ cat }}</option>
+    </select>
 
-      <div class="filter-group">
-        <label>Fornecedor:</label>
-        <select [(ngModel)]="selectedSupplier" (change)="onSupplierChange()">
-          <option *ngFor="let sup of suppliers">{{ sup }}</option>
-        </select>
-      </div>
-    </div>
+    <select class="filter-select" [(ngModel)]="selectedSupplier" (change)="onSupplierChange()">
+      <option *ngFor="let sup of suppliers">{{ sup }}</option>
+    </select>
   </div>
 
-  <!-- Table Section -->
   <table class="full-width-table">
     <thead>
       <tr>
-        <th (click)="setSortBy('date')" class="sortable">
-          Data <span *ngIf="sortBy === 'date'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th (click)="setSortBy('name')" class="sortable">
-          Produto <span *ngIf="sortBy === 'name'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th (click)="setSortBy('brand')" class="sortable">
-          Marca <span *ngIf="sortBy === 'brand'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th (click)="setSortBy('category')" class="sortable">
-          Categoria <span *ngIf="sortBy === 'category'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th (click)="setSortBy('quantity')" class="sortable">
-          Qt. <span *ngIf="sortBy === 'quantity'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
+        <th (click)="setSortBy('date')" class="sortable">Data <span *ngIf="sortBy === 'date'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th (click)="setSortBy('name')" class="sortable">Produto <span *ngIf="sortBy === 'name'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th (click)="setSortBy('brand')" class="sortable">Marca <span *ngIf="sortBy === 'brand'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th (click)="setSortBy('category')" class="sortable">Categoria <span *ngIf="sortBy === 'category'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th (click)="setSortBy('quantity')" class="sortable">Qtd. <span *ngIf="sortBy === 'quantity'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
         <th>Un.</th>
-        <th (click)="setSortBy('supplier')" class="sortable">
-          Fornecedor <span *ngIf="sortBy === 'supplier'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th (click)="setSortBy('price')" class="sortable">
-          Preço un. (€) <span *ngIf="sortBy === 'price'" class="sort-indicator">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
-        </th>
-        <th>Observações</th>
-        <th>Ações</th>
+        <th (click)="setSortBy('supplier')" class="sortable">Fornecedor <span *ngIf="sortBy === 'supplier'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th (click)="setSortBy('price')" class="sortable">Preco un. <span *ngIf="sortBy === 'price'">{{ sortOrder === 'asc' ? 'ASC' : 'DESC' }}</span></th>
+        <th>Observacoes</th>
+        <th>Acoes</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let i of filteredItems; trackBy: trackById" [class.low-stock]="isLowStock(i)">
         <ng-container *ngIf="editingId !== i.id; else editRow">
-          <td [attr.data-tooltip]="i.date"><span class="cell-text">{{ i.date }}</span></td>
-          <td [attr.data-tooltip]="i.name"><span class="cell-text">{{ i.name }}</span></td>
-          <td [attr.data-tooltip]="i.brand"><span class="cell-text">{{ i.brand }}</span></td>
-          <td [attr.data-tooltip]="i.category"><span class="cell-text">{{ i.category }}</span></td>
+          <td><span class="cell-text">{{ i.date }}</span></td>
+          <td><span class="cell-text product-name">{{ i.name }}</span></td>
+          <td><span class="cell-text">{{ i.brand || '-' }}</span></td>
+          <td><span class="badge neutral">{{ i.category || '-' }}</span></td>
           <td class="quantity-cell" [class.alert]="isLowStock(i)">
-            <span class="cell-text">{{ i.quantity }}</span>
-            <span *ngIf="isLowStock(i)" class="alert-badge">⚠️</span>
+            <span>{{ i.quantity }}</span>
+            <span *ngIf="isLowStock(i)" class="badge danger">Baixo</span>
           </td>
-          <td [attr.data-tooltip]="i.unit"><span class="cell-text">{{ i.unit }}</span></td>
-          <td [attr.data-tooltip]="i.supplier"><span class="cell-text">{{ i.supplier }}</span></td>
-          <td [attr.data-tooltip]="i.price"><span class="cell-text">{{ i.price }}</span></td>
-          <td class="notes-cell" [attr.data-tooltip]="i.notes"><span class="cell-text">{{ i.notes }}</span></td>
+          <td><span class="cell-text">{{ i.unit }}</span></td>
+          <td><span class="cell-text">{{ i.supplier || '-' }}</span></td>
+          <td><span class="amount">{{ i.price || 0 }} EUR</span></td>
+          <td class="notes-cell"><span class="cell-text">{{ i.notes || '-' }}</span></td>
           <td class="actions-cell">
-            <button 
-              class="btn btn--icon-circle btn--success" 
-              (click)="showMovementModal(i)" 
-              aria-label="Registar movimento" 
-              title="Registar entrada/saída"
-            >
-              <!-- Arrow icon for movement -->
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-5 9h-3v3H8l4-4 4 4h-3v-3z"/></svg>
+            <button class="btn btn--icon-circle btn--success" (click)="showMovementModal(i)" aria-label="Registar movimento" title="Registar movimento">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             </button>
             <button class="btn btn--icon-circle" (click)="edit(i)" aria-label="Editar" title="Editar">
-              <!-- Minimal pencil icon -->
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
             </button>
             <button class="btn btn--icon-circle btn--danger" (click)="remove(i.id)" aria-label="Apagar" title="Apagar">
-              <!-- Minimal trash icon -->
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
             </button>
           </td>
         </ng-container>
@@ -98,12 +67,15 @@
         <ng-template #editRow>
           <td><input [(ngModel)]="editModel.date" type="date" /></td>
           <td><input [(ngModel)]="editModel.name" /></td>
-          <td><input [(ngModel)]="editModel.brand" /></td>
+          <td>
+            <select [(ngModel)]="editModel.brand">
+              <option value="">Sem marca</option>
+              <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+            </select>
+          </td>
           <td>
             <select [(ngModel)]="editModel.category">
-              <option>Outros</option>
-              <option>Shampoo</option>
-              <option>Tratamento</option>
+              <option *ngFor="let category of categories" [value]="category" [hidden]="category === 'Todos'">{{ category }}</option>
             </select>
           </td>
           <td><input [(ngModel)]="editModel.quantity" type="number" /></td>
@@ -113,17 +85,18 @@
           <td><input [(ngModel)]="editModel.notes" /></td>
           <td class="actions-cell">
             <button class="btn btn--icon-circle btn--primary" (click)="saveEdit()" aria-label="Guardar" title="Guardar">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m20 6-11 11-5-5"/></svg>
             </button>
             <button class="btn btn--icon-circle btn--ghost" (click)="cancelEdit()" aria-label="Cancelar" title="Cancelar">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.3 10.59 10.59 16.88 4.3z"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
           </td>
         </ng-template>
       </tr>
+
       <tr *ngIf="!filteredItems || filteredItems.length === 0">
-        <td [attr.colspan]="editingId ? 10 : 10" style="text-align: center; padding: 20px;">
-          {{ items.length === 0 ? 'Sem itens' : 'Nenhum item corresponde aos filtros' }}
+        <td colspan="10" class="empty-row">
+          {{ items.length === 0 ? 'Sem produtos registados' : 'Nenhum produto corresponde aos filtros' }}
         </td>
       </tr>
     </tbody>

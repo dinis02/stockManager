@@ -12,33 +12,58 @@ import { NotificationService } from '../../services/notification.service';
     <div class="modal-overlay" *ngIf="isOpen" (click)="close()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h3>Gerenciar Categorias</h3>
-          <button class="btn btn--icon-circle btn--sm" (click)="close()" aria-label="Fechar">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.41L10.59 13.41 4.29 19.71 2.88 18.3 9.18 12 2.88 5.71 4.29 4.3 10.59 10.59 16.88 4.3z"/></svg>
+          <div>
+            <div class="modal-eyebrow">Gestao</div>
+            <h3>Categorias</h3>
+          </div>
+          <button class="btn btn--icon-circle" type="button" (click)="close()" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
           </button>
         </div>
-        
+
         <div class="modal-body">
           <div class="add-category-section">
-            <input 
-              [(ngModel)]="newCategoryName" 
-              type="text" 
-              placeholder="Nova categoria" 
+            <input
+              [(ngModel)]="newCategoryName"
+              type="text"
+              placeholder="Nova categoria"
               (keyup.enter)="addCategory()"
             />
-            <button class="btn btn--primary" (click)="addCategory()" [disabled]="!newCategoryName?.trim()">
+            <button class="btn btn-primary" type="button" (click)="addCategory()" [disabled]="!newCategoryName?.trim()">
               Adicionar
             </button>
           </div>
 
           <div class="categories-list">
-            <h4>Categorias existentes:</h4>
+            <div class="table-title">Categorias existentes</div>
+
             <div class="category-item" *ngFor="let cat of categories">
-              <span>{{ cat.name }}</span>
-              <button class="btn btn--icon-circle btn--sm btn--danger" (click)="deleteCategory(cat.id)" aria-label="Apagar">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-              </button>
+              <ng-container *ngIf="editingId !== cat.id; else editTpl">
+                <span>{{ cat.name }}</span>
+                <div class="row-actions">
+                  <button class="btn btn--icon-circle" type="button" (click)="startEdit(cat)" aria-label="Editar" title="Editar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+                  </button>
+                  <button class="btn btn--icon-circle btn--danger" type="button" (click)="deleteCategory(cat.id)" aria-label="Apagar" title="Apagar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                </div>
+              </ng-container>
+
+              <ng-template #editTpl>
+                <input [(ngModel)]="editName" type="text" (keyup.enter)="saveEdit(cat.id)" />
+                <div class="row-actions">
+                  <button class="btn btn--icon-circle btn--primary" type="button" (click)="saveEdit(cat.id)" aria-label="Guardar" title="Guardar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m20 6-11 11-5-5"/></svg>
+                  </button>
+                  <button class="btn btn--icon-circle btn--ghost" type="button" (click)="cancelEdit()" aria-label="Cancelar" title="Cancelar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </ng-template>
             </div>
+
+            <div class="empty-state" *ngIf="!categories.length">Ainda nao existem categorias.</div>
           </div>
         </div>
       </div>
@@ -47,82 +72,107 @@ import { NotificationService } from '../../services/notification.service';
   styles: [`
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+      inset: 0;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      background: rgba(27, 23, 20, 0.28);
+      padding: 18px;
     }
 
     .modal-content {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      max-width: 400px;
-      width: 90%;
-      max-height: 80vh;
+      width: min(92vw, 520px);
+      max-height: 86vh;
       overflow-y: auto;
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 3px;
+      box-shadow: 0 18px 50px rgba(60, 42, 28, 0.16);
     }
 
     .modal-header {
       display: flex;
+      align-items: flex-start;
       justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #e0e0e0;
+      gap: 16px;
+      padding: 24px;
+      border-bottom: 1px solid var(--admin-border);
     }
 
-    .modal-header h3 {
-      margin: 0;
-      font-size: 18px;
+    .modal-eyebrow,
+    .table-title {
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    h3 {
+      margin: 4px 0 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--admin-text);
     }
 
     .modal-body {
-      padding: 20px;
+      padding: 24px;
     }
 
     .add-category-section {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .add-category-section input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
+      margin-bottom: 24px;
     }
 
     .categories-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: grid;
+      gap: 8px;
     }
 
-    .categories-list h4 {
-      margin: 0 0 10px 0;
-      font-size: 14px;
-      color: #666;
+    .table-title {
+      margin-bottom: 6px;
     }
 
     .category-item {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      padding: 12px;
-      background: #f5f5f5;
-      border-radius: 4px;
       gap: 10px;
+      min-height: 48px;
+      padding: 10px 12px;
+      background: var(--admin-surface-soft);
+      border: 1px solid var(--admin-border-soft);
+      border-radius: 4px;
+      color: var(--admin-text-soft);
+      font-size: 12px;
     }
 
-    .category-item span {
-      flex: 1;
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .empty-state {
+      padding: 22px;
+      text-align: center;
+      color: var(--admin-muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .add-category-section,
+      .category-item {
+        grid-template-columns: 1fr;
+      }
+
+      .row-actions {
+        justify-content: flex-end;
+      }
     }
   `]
 })
@@ -130,6 +180,8 @@ export class CategoriesModalComponent implements OnInit {
   isOpen = false;
   categories: Category[] = [];
   newCategoryName = '';
+  editingId: number | null = null;
+  editName = '';
 
   constructor(
     private categoryService: CategoryService,
@@ -143,26 +195,57 @@ export class CategoriesModalComponent implements OnInit {
   }
 
   open(): void {
+    this.categoryService.loadCategories();
     this.isOpen = true;
   }
 
   close(): void {
     this.isOpen = false;
     this.newCategoryName = '';
+    this.cancelEdit();
   }
 
   addCategory(): void {
-    if (!this.newCategoryName?.trim()) return;
-    this.categoryService.addCategory(this.newCategoryName).subscribe(
+    const name = this.newCategoryName.trim();
+    if (!name) return;
+    this.categoryService.addCategory(name).subscribe(
       () => {
         this.notificationService.show('Categoria adicionada com sucesso', 'success');
         this.newCategoryName = '';
       },
       (err) => {
         if (err.status === 409) {
-          this.notificationService.show('Categoria já existe', 'error');
+          this.notificationService.show('Categoria ja existe', 'error');
         } else {
           this.notificationService.show('Erro ao adicionar categoria', 'error');
+        }
+      }
+    );
+  }
+
+  startEdit(category: Category): void {
+    this.editingId = category.id;
+    this.editName = category.name;
+  }
+
+  cancelEdit(): void {
+    this.editingId = null;
+    this.editName = '';
+  }
+
+  saveEdit(id: number): void {
+    const name = this.editName.trim();
+    if (!name) return;
+    this.categoryService.updateCategory(id, name).subscribe(
+      () => {
+        this.notificationService.show('Categoria atualizada com sucesso', 'success');
+        this.cancelEdit();
+      },
+      (err) => {
+        if (err.status === 409) {
+          this.notificationService.show('Categoria ja existe', 'error');
+        } else {
+          this.notificationService.show('Erro ao atualizar categoria', 'error');
         }
       }
     );
@@ -173,6 +256,7 @@ export class CategoriesModalComponent implements OnInit {
       this.categoryService.deleteCategory(id).subscribe(
         () => {
           this.notificationService.show('Categoria apagada com sucesso', 'success');
+          if (this.editingId === id) this.cancelEdit();
         },
         () => {
           this.notificationService.show('Erro ao apagar categoria', 'error');

@@ -4,6 +4,8 @@ import { ItemsService } from '../../services/items.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CategoryService } from '../../services/categories.service';
+import { BrandService } from '../../services/brand.service';
 
 @Component({
   selector: 'app-inventory-list',
@@ -13,6 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./inventory-list.component.scss']
 })
 export class InventoryListComponent implements OnInit, OnDestroy {
+  private readonly API_URL = 'http://localhost:3000/api';
   items: any[] = [];
   filteredItems: any[] = [];
   loading = false;
@@ -26,7 +29,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   searchQuery = '';
   selectedCategory = 'Todos';
   selectedSupplier = 'Todos';
-  categories: string[] = ['Todos', 'Outros', 'Shampoo', 'Tratamento'];
+  categories: string[] = ['Todos'];
+  brands: string[] = [];
   suppliers: string[] = [];
   
   // Sorting
@@ -36,11 +40,30 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   // Movement modal integration
   @Output() openMovementModal = new EventEmitter<any>();
 
-  constructor(private itemsService: ItemsService, private http: HttpClient, private cd: ChangeDetectorRef, private appRef: ApplicationRef) {}
+  constructor(
+    private itemsService: ItemsService,
+    private http: HttpClient,
+    private cd: ChangeDetectorRef,
+    private appRef: ApplicationRef,
+    private categoryService: CategoryService,
+    private brandService: BrandService
+  ) {}
 
   ngOnInit(): void {
     // initial load
     this.load();
+    this.categoryService.categories$.subscribe(categories => {
+      this.categories = ['Todos', ...categories.map(category => category.name)];
+      if (!this.categories.includes(this.selectedCategory)) {
+        this.selectedCategory = 'Todos';
+      }
+      this.updateFilteredItems();
+    });
+    this.categoryService.loadCategories();
+    this.brandService.brands$.subscribe(brands => {
+      this.brands = brands.map(brand => brand.name);
+    });
+    this.brandService.loadBrands();
     // subscribe to the shared ItemsService refresh observable
     // ignore refresh events that originate from this list (source === 'from-list')
     this.subs = this.itemsService.refresh$.subscribe((payload: any) => {
@@ -102,38 +125,13 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     const id = this.editModel.id;
     const isLocal = String(id).startsWith('local-');
     if (isLocal) {
-      try {
-        const raw = localStorage.getItem('items');
-        const list = raw ? JSON.parse(raw) : [];
-        const idx = list.findIndex((it: any) => String(it.id) === String(id));
-        if (idx >= 0) {
-          list[idx] = { ...this.editModel };
-          localStorage.setItem('items', JSON.stringify(list));
-        }
-      } catch (e) {
-        console.error('Failed updating local item', e);
-      }
+      console.error('Cannot edit local-only item. Recreate it so it exists in the backend.');
       this.cancelEdit();
-      // update in-memory list so UI updates immediately
-      this.items = this.items.map(it => String(it.id) === String(id) ? { ...this.editModel } : it);
-      // use an immutable replacement so Angular change detection updates the view
-      this.items = [...this.items];
-      console.log('[InventoryList] saved local edit, updated items count=', this.items.length);
-      try { this.cd.detectChanges(); } catch (e) {}
-      // notify other components that items changed (mark source so this list ignores it)
-      // bump render tick for this item to force re-render
-      try { this.bumpRenderTickFor(id); } catch (e) {}
-      // record our own update timestamp so we can ignore immediate reloads
-      this._lastOwnUpdateTs = Date.now();
-      this.itemsService.triggerRefresh('inventory-list');
-      try { this.load(); } catch (e) {}
-      // ensure persisted state is reloaded (small delay to let localStorage settle)
-      setTimeout(() => { try { this.load(); } catch (e) {} }, 60);
       return;
     }
 
     // server-backed item: PUT
-    this.http.put(`/api/items/${Number(id)}`, this.editModel).subscribe({ next: () => {
+    this.http.put(`${this.API_URL}/items/${Number(id)}`, this.editModel).subscribe({ next: () => {
       // replace the item locally so the table updates instantly
       this.items = this.items.map(it => String(it.id) === String(id) ? { ...this.editModel } : it);
       // immutable update to trigger change detection
@@ -147,29 +145,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       try { this.load(); } catch (e) {}
     }, error: (err) => {
       console.error('Failed PUT during saveEdit', err);
-      // fallback: update locally to avoid data loss
-      try {
-        const raw = localStorage.getItem('items');
-        const list = raw ? JSON.parse(raw) : [];
-        const toSave = { ...this.editModel, id: `local-${Date.now()}` };
-        list.unshift(toSave);
-        localStorage.setItem('items', JSON.stringify(list));
-      } catch (e) {
-        console.error('Failed to fallback-save locally', e);
-      }
-      // reflect fallback in-memory and notify
-      const fallbackId = `local-${Date.now()}`;
-      this.items.unshift({ ...this.editModel, id: fallbackId });
-      // persist fallback id to localStorage already done above; ensure view reflects it
-      // immutable replacement to notify Angular
-      this.items = [...this.items];
-      console.log('[InventoryList] fallback saved locally after PUT error, items count=', this.items.length);
-      try { this.bumpRenderTickFor(fallbackId); } catch (e) {}
-      try { this.cd.detectChanges(); } catch (e) {}
-      this._lastOwnUpdateTs = Date.now();
-      this.itemsService.triggerRefresh('inventory-list');
       this.cancelEdit();
-      try { this.load(); } catch (e) {}
     }});
   }
 
@@ -177,7 +153,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     console.log('[InventoryList] load() start');
     this.loading = true;
     // try backend first, fallback to localStorage if unavailable
-    this.http.get<any[]>('/api/items').subscribe({
+    this.http.get<any[]>(`${this.API_URL}/items`).subscribe({
       next: data => {
         this.items = data || [];
         this.updateSuppliersList();
@@ -188,18 +164,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         try { this.appRef.tick(); } catch (e) {}
       },
       error: () => {
-        // backend unavailable -> load from localStorage
-        try {
-          const raw = localStorage.getItem('items');
-          this.items = raw ? JSON.parse(raw) : [];
-        } catch (e) {
-          console.error('Failed to read local items', e);
-          this.items = [];
-        }
+        this.items = [];
         this.updateSuppliersList();
         this.updateFilteredItems();
         this.loading = false;
-        console.log('[InventoryList] load() fallback to localStorage,', this.items.length, 'items');
+        console.error('[InventoryList] failed to load backend items');
         try { this.cd.detectChanges(); } catch (e) {}
         try { this.appRef.tick(); } catch (e) {}
       }
@@ -208,42 +177,17 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   remove(id: string) {
     // try backend delete; update in-memory list immediately so UI reflects change
-    this.http.delete(`/api/items/${id}`).subscribe({ next: () => {
+    this.http.delete(`${this.API_URL}/items/${id}`).subscribe({ next: () => {
       this.items = this.items.filter(it => String(it.id) !== String(id));
       this.items = [...this.items];
       console.log('[InventoryList] deleted item (backend success), items count=', this.items.length);
       try { this.bumpRenderTickFor(id); } catch (e) {}
       try { this.cd.detectChanges(); } catch (e) {}
-      // also remove from localStorage (safe to do)
-      try {
-        const raw = localStorage.getItem('items');
-        const list = raw ? JSON.parse(raw) : [];
-        const filtered = list.filter((it: any) => String(it.id) !== String(id));
-        localStorage.setItem('items', JSON.stringify(filtered));
-      } catch (e) {
-        console.error('Failed to remove local item', e);
-      }
       this._lastOwnUpdateTs = Date.now();
       this.itemsService.triggerRefresh('inventory-list');
       try { this.load(); } catch (e) {}
     }, error: () => {
-      // backend error -> remove from localStorage and update view
-      try {
-        const raw = localStorage.getItem('items');
-        const list = raw ? JSON.parse(raw) : [];
-        const filtered = list.filter((it: any) => String(it.id) !== String(id));
-        localStorage.setItem('items', JSON.stringify(filtered));
-      } catch (e) {
-        console.error('Failed to remove local item', e);
-      }
-      this.items = this.items.filter(it => String(it.id) !== String(id));
-      this.items = [...this.items];
-      console.log('[InventoryList] deleted item (backend error fallback), items count=', this.items.length);
-      try { this.bumpRenderTickFor(id); } catch (e) {}
-      try { this.cd.detectChanges(); } catch (e) {}
-      this._lastOwnUpdateTs = Date.now();
-      this.itemsService.triggerRefresh('inventory-list');
-      try { this.load(); } catch (e) {}
+      console.error('[InventoryList] failed to delete backend item');
     }});
   }
 

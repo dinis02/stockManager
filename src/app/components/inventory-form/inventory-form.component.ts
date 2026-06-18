@@ -4,6 +4,8 @@ import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Category, CategoryService } from '../../services/categories.service';
+import { Brand, BrandService } from '../../services/brand.service';
 
 @Component({
   selector: 'app-inventory-form',
@@ -13,6 +15,10 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
   styleUrls: ['./inventory-form.component.scss']
 })
 export class InventoryFormComponent {
+  private readonly API_URL = 'http://localhost:3000/api';
+  categories: Category[] = [];
+  brands: Brand[] = [];
+
   item: any = {
     date: new Date().toISOString().slice(0, 10),
     name: '',
@@ -36,7 +42,25 @@ export class InventoryFormComponent {
     }
   }
 
-  constructor(private http: HttpClient, private itemsService: ItemsService, private notificationService: NotificationService) {}
+  constructor(
+    private http: HttpClient,
+    private itemsService: ItemsService,
+    private notificationService: NotificationService,
+    private categoryService: CategoryService,
+    private brandService: BrandService
+  ) {
+    this.categoryService.categories$.subscribe(categories => {
+      this.categories = categories;
+      if (!this.item.category && categories.length) {
+        this.item.category = categories[0].name;
+      }
+    });
+    this.categoryService.loadCategories();
+    this.brandService.brands$.subscribe(brands => {
+      this.brands = brands;
+    });
+    this.brandService.loadBrands();
+  }
 
   save() {
     // basic client-side validation
@@ -74,27 +98,22 @@ export class InventoryFormComponent {
       } else {
         // attempt PUT to backend for existing server item
         const id = Number(this.item.id);
-        this.http.put(`/api/items/${id}`, this.item).subscribe({ next: () => {
+        this.http.put(`${this.API_URL}/items/${id}`, this.item).subscribe({ next: () => {
           this.saving = false;
             this.notificationService.show('Guardado com sucesso', 'success');
           this.reset();
           this.itemsService.triggerRefresh('inventory-form');
         }, error: (err) => {
-          // log the error for debugging and fallback to local save
           console.error('PUT /api/items/' + id + ' failed', err);
-          // do NOT automatically POST (that would create a duplicate). Save locally as a safe fallback.
-          this.saveToLocal();
           this.saving = false;
-          this.notificationService.show('Guardado com sucesso', 'success');
-          this.reset();
-          this.itemsService.triggerRefresh('inventory-form');
+          this.notificationService.show('Erro ao guardar produto', 'error');
         }});
         return;
       }
     }
 
     // no id -> create new
-    this.http.post('/api/items', this.item).subscribe({
+    this.http.post(`${this.API_URL}/items`, this.item).subscribe({
       next: () => {
         this.saving = false;
         this.notificationService.show('Guardado com sucesso', 'success');
@@ -102,12 +121,8 @@ export class InventoryFormComponent {
         this.itemsService.triggerRefresh('inventory-form');
       },
       error: () => {
-        // fallback: save locally
-        this.saveToLocal();
         this.saving = false;
-        this.notificationService.show('Guardado com sucesso', 'success');
-        this.reset();
-        this.itemsService.triggerRefresh('inventory-form');
+        this.notificationService.show('Erro ao guardar produto', 'error');
       }
     });
   }

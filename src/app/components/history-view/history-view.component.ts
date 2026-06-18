@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Movement, MovementService } from '../../services/movement.service';
+import { HistoryEvent, MovementService } from '../../services/movement.service';
 
 @Component({
   selector: 'app-history-view',
@@ -9,173 +9,193 @@ import { Movement, MovementService } from '../../services/movement.service';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="history-container">
-      <h2>Histórico de Movimentações</h2>
-      
-      <div class="filters">
-        <input 
-          type="text" 
-          placeholder="Pesquisar..." 
-          [(ngModel)]="searchTerm"
-          (ngModelChange)="filterMovements()"
-        />
+      <div class="table-toolbar">
+        <span class="table-title">Historico geral</span>
+        <div class="table-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+          <input
+            type="text"
+            placeholder="Pesquisar historico..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="filterEvents()"
+          />
+        </div>
       </div>
 
-      <table class="movements-table" *ngIf="filteredMovements.length > 0; else noMovements">
+      <table class="history-table" *ngIf="filteredEvents.length > 0; else noEvents">
         <thead>
           <tr>
-            <th>Data & Hora</th>
-            <th>Produto</th>
-            <th>Marca</th>
+            <th>Data</th>
+            <th>Evento</th>
             <th>Tipo</th>
-            <th>Quantidade</th>
+            <th>Detalhes</th>
             <th>Utilizador</th>
-            <th>Observações</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let mov of filteredMovements">
-            <td>{{ formatDate(mov.timestamp) }}</td>
-            <td>{{ mov.name }}</td>
-            <td>{{ mov.brand || '-' }}</td>
+          <tr *ngFor="let event of filteredEvents">
+            <td>{{ formatDate(event.timestamp) }}</td>
+            <td>{{ event.title }}</td>
             <td>
-              <span [class.badge-entry]="mov.type === 'entry'" [class.badge-exit]="mov.type === 'exit'" class="badge">
-                {{ mov.type === 'entry' ? 'Entrada' : 'Saída' }}
+              <span class="badge" [class]="badgeClass(event)">
+                {{ labelFor(event) }}
               </span>
             </td>
-            <td>{{ mov.quantity }}</td>
-            <td>{{ mov.username || '-' }}</td>
-            <td>{{ mov.notes || '-' }}</td>
+            <td>{{ event.details || '-' }}</td>
+            <td>{{ event.username || '-' }}</td>
           </tr>
         </tbody>
       </table>
 
-      <ng-template #noMovements>
-        <div class="no-data">Sem histórico de movimentações</div>
+      <ng-template #noEvents>
+        <div class="no-data">Sem historico registado</div>
       </ng-template>
     </div>
   `,
   styles: [`
     .history-container {
-      padding: 20px;
+      min-width: 900px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--admin-border-soft);
+      flex-wrap: wrap;
     }
 
-    .filters {
-      margin-bottom: 20px;
+    .table-title {
+      color: var(--admin-muted);
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
     }
 
-    .filters input {
-      padding: 10px;
-      border: 1px solid #ddd;
+    .table-search {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 260px;
+      padding: 6px 11px;
       border-radius: 4px;
-      width: 100%;
-      max-width: 300px;
-      font-size: 14px;
+      background: var(--admin-surface-soft);
+      border: 1px solid var(--admin-border-soft);
+      color: var(--admin-muted);
     }
 
-    .movements-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 4px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    .table-search svg {
+      width: 12px;
+      height: 12px;
     }
 
-    .movements-table th {
-      background: #f5f5f5;
-      padding: 12px;
-      text-align: left;
-      font-weight: 600;
-      border-bottom: 1px solid #ddd;
-      font-size: 13px;
+    .table-search input {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-size: 11px;
     }
 
-    .movements-table td {
-      padding: 12px;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 13px;
-    }
-
-    .movements-table tr:hover {
-      background: #f9f9f9;
+    tbody tr:hover {
+      background: rgba(127, 93, 64, 0.04);
     }
 
     .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 3px;
-      font-size: 12px;
-      font-weight: 600;
+      display: inline-flex;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      background: rgba(127, 93, 64, 0.08);
+      color: var(--admin-muted);
     }
 
+    .badge-create,
     .badge-entry {
-      background: #e8f5e9;
-      color: #2e7d32;
+      background: rgba(63, 122, 85, 0.1);
+      color: var(--admin-success);
     }
 
+    .badge-update {
+      background: rgba(184, 125, 84, 0.12);
+      color: var(--admin-accent);
+    }
+
+    .badge-delete,
     .badge-exit {
-      background: #ffebee;
-      color: #c62828;
+      background: rgba(160, 48, 48, 0.12);
+      color: var(--admin-danger);
     }
 
     .no-data {
+      padding: 38px;
       text-align: center;
-      padding: 40px;
-      color: #999;
-    }
-
-    @media (max-width: 768px) {
-      .movements-table {
-        font-size: 12px;
-      }
-
-      .movements-table th,
-      .movements-table td {
-        padding: 8px;
-      }
+      color: var(--admin-muted);
+      font-size: 12px;
     }
   `]
 })
 export class HistoryViewComponent implements OnInit {
-  movements: Movement[] = [];
-  filteredMovements: Movement[] = [];
+  events: HistoryEvent[] = [];
+  filteredEvents: HistoryEvent[] = [];
   searchTerm = '';
 
   constructor(private movementService: MovementService) {}
 
   ngOnInit(): void {
-    this.loadMovements();
+    this.loadEvents();
   }
 
-  loadMovements(): void {
-    this.movementService.getMovements().subscribe(
+  loadEvents(): void {
+    this.movementService.getHistory().subscribe(
       (data) => {
-        this.movements = data;
-        this.filterMovements();
+        this.events = data || [];
+        this.filterEvents();
       },
-      (err) => console.error('Error loading movements:', err)
+      (err) => console.error('Error loading history:', err)
     );
   }
 
-  filterMovements(): void {
-    if (!this.searchTerm) {
-      this.filteredMovements = this.movements;
-    } else {
-      const term = this.searchTerm.toLowerCase();
-      this.filteredMovements = this.movements.filter(m =>
-        m.name.toLowerCase().includes(term) ||
-        (m.brand && m.brand.toLowerCase().includes(term)) ||
-        (m.username && m.username.toLowerCase().includes(term))
-      );
+  filterEvents(): void {
+    if (!this.searchTerm.trim()) {
+      this.filteredEvents = this.events;
+      return;
     }
+
+    const term = this.searchTerm.toLowerCase();
+    this.filteredEvents = this.events.filter(event =>
+      event.title?.toLowerCase().includes(term) ||
+      event.details?.toLowerCase().includes(term) ||
+      event.entityType?.toLowerCase().includes(term) ||
+      event.action?.toLowerCase().includes(term) ||
+      event.username?.toLowerCase().includes(term)
+    );
   }
 
   formatDate(timestamp: number): string {
-    const date = new Date(timestamp * 1000);
-    return date.toLocaleString('pt-PT');
+    return new Date(timestamp * 1000).toLocaleString('pt-PT');
+  }
+
+  badgeClass(event: HistoryEvent): string {
+    if (event.action === 'entry') return 'badge-entry';
+    if (event.action === 'exit') return 'badge-exit';
+    if (event.action === 'create') return 'badge-create';
+    if (event.action === 'update') return 'badge-update';
+    if (event.action === 'delete') return 'badge-delete';
+    return '';
+  }
+
+  labelFor(event: HistoryEvent): string {
+    const labels: Record<string, string> = {
+      entry: 'Entrada',
+      exit: 'Saida',
+      create: 'Criado',
+      update: 'Editado',
+      delete: 'Apagado'
+    };
+    return labels[event.action] || event.action;
   }
 }

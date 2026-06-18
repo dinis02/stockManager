@@ -37,6 +37,12 @@ export class CategoryService {
     );
   }
 
+  updateCategory(id: number, name: string): Observable<Category> {
+    return this.http.put<Category>(`${this.API_URL}/categories/${id}`, { name }).pipe(
+      tap(() => this.loadCategories())
+    );
+  }
+
   deleteCategory(id: number): Observable<{ ok: boolean }> {
     return this.http.delete<{ ok: boolean }>(`${this.API_URL}/categories/${id}`).pipe(
       tap(() => this.loadCategories())

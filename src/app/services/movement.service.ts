@@ -14,6 +14,21 @@ export interface Movement {
   notes: string | null;
 }
 
+export interface HistoryEvent {
+  id: string;
+  source: 'movement' | 'audit';
+  entityType: string;
+  entityId?: string;
+  action: string;
+  title: string;
+  details?: string | null;
+  name?: string;
+  brand?: string;
+  quantity?: number;
+  username?: string | null;
+  timestamp: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +39,10 @@ export class MovementService {
 
   getMovements(): Observable<Movement[]> {
     return this.http.get<Movement[]>(`${this.API_URL}/movements`);
+  }
+
+  getHistory(): Observable<HistoryEvent[]> {
+    return this.http.get<HistoryEvent[]>(`${this.API_URL}/history`);
   }
 
   getMovementsByProduct(subproductId: number): Observable<Movement[]> {
