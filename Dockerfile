@@ -10,7 +10,7 @@ COPY angular.json tsconfig*.json ./
 COPY src ./src
 RUN npm run build
 
-FROM node:18-bullseye AS runtime
+FROM node:24-bookworm AS runtime
 
 ENV NODE_ENV=production
 ENV PORT=3000
